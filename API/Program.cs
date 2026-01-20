@@ -1,6 +1,8 @@
+using API.Services;
 using Application;
 using Infrastructure;
-using Presentation;
+using Infrastructure.Services;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,10 +12,12 @@ builder.Services.AddControllers();
 
 builder.Services.AddOpenApi();
 builder.Services.AddApplication()
-    .AddPresentation()
     .AddInfrastructure();
+builder.Services.AddIdentityServices();
 
-
+builder.Services.AddAPIServices();
+builder.Services.AddValidations();
+builder.Services.AddDatabase(builder.Configuration);
 
 var app = builder.Build();
 
