@@ -17,14 +17,11 @@ namespace Infrastructure.Services
             services.AddAuthentication(options =>
             {
 
-              options.DefaultAuthenticateScheme =
-              options.DefaultChallengeScheme =
-              options.DefaultForbidScheme =
-              options.DefaultScheme =
-              options.DefaultSignInScheme = 
-                options.DefaultSignOutScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 
-            }).AddCookie(IdentityConstants.ApplicationScheme)
+
+            })
 
               .AddJwtBearer(options =>
               {
@@ -36,7 +33,8 @@ namespace Infrastructure.Services
                       ValidAudience = builder.Configuration["JWT:Audience"],
                       ValidateIssuerSigningKey = true,
                       IssuerSigningKey = new SymmetricSecurityKey(
-                        System.Text.Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"]!))
+                        System.Text.Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"]!)),
+                      ValidateLifetime = true
                   };
               });
 

@@ -1,5 +1,5 @@
 ﻿using API.Controllers;
-using Application.Commands;
+using Application.Commands.Users;
 using Application.Dtos.Users;
 using Domain.Entities;
 using MediatR;

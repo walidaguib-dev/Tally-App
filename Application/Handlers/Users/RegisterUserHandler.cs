@@ -1,5 +1,4 @@
-﻿using Application.Commands;
-using Application.Dtos.Users;
+﻿using Application.Dtos.Users;
 using Application.Mappers;
 using Domain.Entities;
 using FluentValidation;
@@ -10,8 +9,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using FluentValidation.Results;
+using Application.Commands.Users;
 
-namespace Application.Handlers
+namespace Application.Handlers.Users
 {
     public class RegisterUserHandler
         (IUser repo ,

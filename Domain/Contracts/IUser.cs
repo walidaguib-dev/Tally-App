@@ -13,6 +13,7 @@ namespace Domain.Contracts
         public Task<User?> SignIn(string username , string password);
         public Task<User?> ResetPassword(User user , string password);
         public Task<User> VerifyAccount(User user);
+        public Task<List<User>> GetAllUsers();
 
     }
 }

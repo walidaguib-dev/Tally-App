@@ -7,5 +7,6 @@ namespace Domain.Entities
 {
     public class User : IdentityUser
     {
+        public RefreshToken refreshToken { get; set; }
     }
 }

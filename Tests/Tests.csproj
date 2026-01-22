@@ -48,12 +48,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="DomainTests\" />
-    <Folder Include="InfrastructureTests\" />
-    <Folder Include="ApiTests\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\API\API.csproj" />
     <ProjectReference Include="..\Application\Application.csproj" />
     <ProjectReference Include="..\Domain\Domain.csproj" />
