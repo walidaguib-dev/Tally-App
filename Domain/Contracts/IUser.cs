@@ -11,7 +11,7 @@ namespace Domain.Contracts
     {
         public Task<User> CreateUser(User user , string password, List<string> roles);
         public Task<User?> SignIn(string username , string password);
-        public Task<User?> ResetPassword(User user , string password);
+        public Task<User?> ResetPassword(string userId, string current_password, string new_password);
         public Task<User> VerifyAccount(User user);
         public Task<List<User>> GetAllUsers();
 

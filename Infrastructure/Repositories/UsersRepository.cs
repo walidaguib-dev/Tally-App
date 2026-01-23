@@ -1,8 +1,11 @@
-﻿using Domain.Contracts;
+﻿using Domain.helpers;
+using Domain.Contracts;
 using Domain.Entities;
+
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -18,7 +21,6 @@ namespace Infrastructure.Repositories
         ) : IUser
     {
         private readonly UserManager<User> _userManager = userManager;
-       
         private readonly SignInManager<User> _signInManager = signInManager;
         private readonly ApplicationDbContext _context = context;
         public async Task<User> CreateUser(User user , string password , List<string> roles)
@@ -44,9 +46,24 @@ namespace Infrastructure.Repositories
             return await _context.Users.ToListAsync();
         }
 
-        public Task<User?> ResetPassword(User user, string password)
+        public async Task<User?> ResetPassword(string userId, string current_password , string new_password)
         {
-            throw new NotImplementedException();
+            var user = await _userManager.FindByIdAsync(userId.ToString());
+            if (user == null)
+                return null;
+
+            var passwordIsMatch = await _userManager.CheckPasswordAsync(user, current_password);
+            if (!passwordIsMatch)
+                throw new Exception("Password not match!");
+
+            var result = await _userManager.ChangePasswordAsync(user, current_password, new_password);
+            if (!result.Succeeded)
+            {
+                throw new Exception(string.Join(", ",
+                    result.Errors.Select(e => e.Description)));
+            }
+
+            return user;
         }
 
         public async Task<User?> SignIn(string username, string password)

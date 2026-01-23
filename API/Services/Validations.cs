@@ -14,6 +14,7 @@ namespace API.Services
             services.AddKeyedScoped<IValidator<RegisterUserDto>, RegisterUserValidations>("Register");
             services.AddKeyedScoped<IValidator<RefreshTokenRequest>, RefreshTokenRequestValidation>("GenerateToken");
             services.AddKeyedScoped<IValidator<SignInDto> , SignInValidations>("SignIn");
+            services.AddKeyedScoped<IValidator<PasswordResetDto>, PasswordResetValidations>("PasswordReset");
             // Register validation services here
 
         }

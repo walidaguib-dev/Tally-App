@@ -1,6 +1,8 @@
 ﻿using Application.Commands.Users;
 using Application.Dtos.Users;
 using Application.Mappers;
+using Domain.helpers;
+using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -38,6 +40,35 @@ namespace API.Controllers
             var query = new Application.Queries.Users.GetAllUsersQuery();
             var result = await _mediator.Send(query);
             return Ok(result);
+        }
+
+        [HttpPost("reset-password")]
+        [Authorize]
+        public async Task<IActionResult> ResetPassword([FromBody] PasswordResetDto dto)
+        {
+            try
+            {
+                var command = new PasswordResetCommand(dto);
+                var result = await _mediator.Send(command);
+                if (result == null)
+                {
+                    return NotFound(new { message = "User not found" });
+                }
+                return Ok(result.MapToUserDto());
+            }
+            catch (ValidationException e)
+            {
+                return BadRequest(new ValidationErrorResponse
+                {
+                    Errors = [.. e.Errors.Select(err => err.ErrorMessage)]
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+
+            
         }
     }
 }
