@@ -22,6 +22,45 @@ namespace Infrastructure.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("Domain.Entities.EmailToken", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CodeHash")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("ConsumedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("ExpiresAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Purpose")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CodeHash")
+                        .IsUnique();
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("emailTokens");
+                });
+
             modelBuilder.Entity("Domain.Entities.RefreshToken", b =>
                 {
                     b.Property<int>("Id")
@@ -48,6 +87,8 @@ namespace Infrastructure.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ExpiresAt");
 
                     b.HasIndex("userId")
                         .IsUnique();
@@ -152,15 +193,15 @@ namespace Infrastructure.Migrations
                         {
                             Id = "11111111-1111-1111-1111-111111111111",
                             ConcurrencyStamp = "11111111-aaaa-bbbb-cccc-111111111111",
-                            Name = "admin",
-                            NormalizedName = "ADMIN"
+                            Name = "Chef",
+                            NormalizedName = "CHEF"
                         },
                         new
                         {
                             Id = "22222222-2222-2222-2222-222222222222",
                             ConcurrencyStamp = "11111111-aaaa-bbbb-cccc-111111111111",
-                            Name = "user",
-                            NormalizedName = "USER"
+                            Name = "TallyMan",
+                            NormalizedName = "TALLYMAN"
                         });
                 });
 
@@ -270,6 +311,17 @@ namespace Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Domain.Entities.EmailToken", b =>
+                {
+                    b.HasOne("Domain.Entities.User", "User")
+                        .WithMany("EmailTokens")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Domain.Entities.RefreshToken", b =>
                 {
                     b.HasOne("Domain.Entities.User", "user")
@@ -334,6 +386,8 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.User", b =>
                 {
+                    b.Navigation("EmailTokens");
+
                     b.Navigation("refreshToken")
                         .IsRequired();
                 });

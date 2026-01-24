@@ -1,4 +1,5 @@
 ﻿using Domain.Contracts;
+using Domain.Helpers;
 using Infrastructure.Repositories;
 namespace API.Services
 {
@@ -8,6 +9,7 @@ namespace API.Services
         {
             services.AddScoped<IUser, UsersRepository>();
             services.AddScoped<ITokens, TokensRepository>();
+            services.AddScoped<IEmail, EmailsRepository>();
             // Register API services here
             return services;
         }

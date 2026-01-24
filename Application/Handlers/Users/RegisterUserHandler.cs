@@ -15,11 +15,13 @@ namespace Application.Handlers.Users
 {
     public class RegisterUserHandler
         (IUser repo ,
-         [FromKeyedServices("Register")] IValidator<RegisterUserDto> validator
+         [FromKeyedServices("Register")] IValidator<RegisterUserDto> validator,
+         IEmail emailsService
         ) : IRequestHandler<RegisterUserCommand, User>
     {
         private readonly IUser _userRepository = repo;
-        private readonly IValidator<RegisterUserDto> _validator = validator;   
+        private readonly IValidator<RegisterUserDto> _validator = validator;
+        private readonly IEmail _emailsService = emailsService;
 
         public async Task<User> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
         {
@@ -27,7 +29,8 @@ namespace Application.Handlers.Users
             if(result.IsValid)
             {
                 var user = request.Dto.MapToUser();
-                await _userRepository.CreateUser(user,request.Dto.password , request.Dto.Roles);
+                await _userRepository.CreateUser(user,request.Dto.password , request.Dto.Role);
+                await _emailsService.SendEmail(user.Id, Domain.Enums.VerificationPurpose.EmailVerification);
                 return user;
             }
             else

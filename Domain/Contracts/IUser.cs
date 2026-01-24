@@ -9,7 +9,7 @@ namespace Domain.Contracts
 {
     public interface IUser
     {
-        public Task<User> CreateUser(User user , string password, List<string> roles);
+        public Task<User> CreateUser(User user , string password,string role);
         public Task<User?> SignIn(string username , string password);
         public Task<User?> ResetPassword(string userId, string current_password, string new_password);
         public Task<User> VerifyAccount(User user);

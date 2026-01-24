@@ -1,5 +1,6 @@
 using API.Services;
 using Application;
+using Hangfire;
 using Infrastructure;
 using Infrastructure.Services;
 
@@ -8,11 +9,13 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
+
 builder.Services.AddOpenApi();
 builder.Services.AddApplication()
     .AddInfrastructure();
 builder.Services.AddIdentityServices();
-
+builder.Services.ConfigureEmailService(builder);
+builder.Services.ConfigureBackgroundJobs(builder);
 builder.Services.AddAPIServices();
 builder.Services.AddValidations();
 builder.Services.AddDatabase(builder.Configuration);
@@ -27,10 +30,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapControllers();
-
+app.UseHangfireDashboard("/hangfire");
 app.Run();

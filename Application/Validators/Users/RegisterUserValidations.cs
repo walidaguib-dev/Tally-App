@@ -20,10 +20,10 @@ namespace Application.Validators.Users
             RuleFor(u => u.password)
                 .NotNull().NotEmpty().MinimumLength(12)
                 .WithMessage("password must have 12 letters");
-            RuleForEach(x => x.Roles)
-            .NotEmpty()
-            .Must(role => Enum.TryParse<UserRoles>(role, true, out _))
-            .WithMessage(role => $"Ivalid role: {role}");
+            RuleForEach(x => x.Role)
+                .NotEmpty()
+                .NotNull()
+                .WithMessage("Invalid role specified.");
         }
     }
 }

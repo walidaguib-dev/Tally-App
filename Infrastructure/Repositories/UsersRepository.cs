@@ -16,20 +16,17 @@ namespace Infrastructure.Repositories
     public class UsersRepository
         (
         UserManager<User> userManager,
-        ApplicationDbContext context,
+
         SignInManager<User> signInManager
         ) : IUser
     {
         private readonly UserManager<User> _userManager = userManager;
         private readonly SignInManager<User> _signInManager = signInManager;
-        private readonly ApplicationDbContext _context = context;
-        public async Task<User> CreateUser(User user , string password , List<string> roles)
+        public async Task<User> CreateUser(User user , string password , string role)
         {
             var result = await _userManager.CreateAsync(user , password);
-            if (roles != null && roles.Any())
-            {
-                var roleResult = await _userManager.AddToRolesAsync(user, roles);
-
+            
+                var roleResult = await _userManager.AddToRoleAsync(user, role);
                 if (!roleResult.Succeeded)
                 {
                     throw new ValidationException(string.Join(", ",
@@ -37,13 +34,13 @@ namespace Infrastructure.Repositories
                 }
 
 
-            }
+            
             return user;
         }
 
         public async Task<List<User>> GetAllUsers()
         {
-            return await _context.Users.ToListAsync();
+            return await _userManager.Users.ToListAsync();
         }
 
         public async Task<User?> ResetPassword(string userId, string current_password , string new_password)

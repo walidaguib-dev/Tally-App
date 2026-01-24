@@ -1,9 +1,11 @@
-﻿using Application.Dtos.Tokens;
+﻿using Application.Dtos.Mail;
+using Application.Dtos.Tokens;
 using Application.Dtos.Users;
 using Application.Validators.Tokens;
 using Application.Validators.Users;
-using EcommerceApi.validations.Users;
+using Application.Validators.Emails;
 using FluentValidation;
+using EcommerceApi.validations.Users;
 
 namespace API.Services
 {
@@ -15,8 +17,7 @@ namespace API.Services
             services.AddKeyedScoped<IValidator<RefreshTokenRequest>, RefreshTokenRequestValidation>("GenerateToken");
             services.AddKeyedScoped<IValidator<SignInDto> , SignInValidations>("SignIn");
             services.AddKeyedScoped<IValidator<PasswordResetDto>, PasswordResetValidations>("PasswordReset");
-            // Register validation services here
-
+            services.AddKeyedScoped<IValidator<SendEmailDto>, SendEmailValidation>("EmailValidator");
         }
     }
 }

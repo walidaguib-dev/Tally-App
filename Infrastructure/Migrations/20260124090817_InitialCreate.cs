@@ -159,13 +159,60 @@ namespace Infrastructure.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "emailTokens",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    CodeHash = table.Column<string>(type: "text", nullable: false),
+                    ExpiresAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ConsumedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    UserId = table.Column<string>(type: "text", nullable: false),
+                    Purpose = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_emailTokens", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_emailTokens_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "refreshTokens",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Token = table.Column<string>(type: "text", nullable: false),
+                    ExpiresAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    RevokedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    userId = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_refreshTokens", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_refreshTokens_AspNetUsers_userId",
+                        column: x => x.userId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "11111111-1111-1111-1111-111111111111", "98cf1b2f-bdee-4680-aab5-9009b7bb70c2", "admin", "ADMIN" },
-                    { "22222222-2222-2222-2222-222222222222", "141bb769-8b74-4597-9cc7-38e47a9dab07", "user", "USER" }
+                    { "11111111-1111-1111-1111-111111111111", "11111111-aaaa-bbbb-cccc-111111111111", "Chef", "CHEF" },
+                    { "22222222-2222-2222-2222-222222222222", "11111111-aaaa-bbbb-cccc-111111111111", "TallyMan", "TALLYMAN" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -204,6 +251,33 @@ namespace Infrastructure.Migrations
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_emailTokens_CodeHash",
+                table: "emailTokens",
+                column: "CodeHash",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_emailTokens_UserId",
+                table: "emailTokens",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_refreshTokens_ExpiresAt",
+                table: "refreshTokens",
+                column: "ExpiresAt");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_refreshTokens_userId",
+                table: "refreshTokens",
+                column: "userId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RefreshTokens_UserId_Token",
+                table: "refreshTokens",
+                columns: new[] { "userId", "Token" });
         }
 
         /// <inheritdoc />
@@ -223,6 +297,12 @@ namespace Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "emailTokens");
+
+            migrationBuilder.DropTable(
+                name: "refreshTokens");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

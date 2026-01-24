@@ -54,4 +54,10 @@
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="ApiTests\" />
+    <Folder Include="ApplicationTests\" />
+    <Folder Include="InfrastructureTests\" />
+  </ItemGroup>
+
 </Project>
