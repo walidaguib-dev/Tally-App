@@ -18,6 +18,7 @@ namespace API.Services
             services.AddKeyedScoped<IValidator<SignInDto> , SignInValidations>("SignIn");
             services.AddKeyedScoped<IValidator<PasswordResetDto>, PasswordResetValidations>("PasswordReset");
             services.AddKeyedScoped<IValidator<SendEmailDto>, SendEmailValidation>("EmailValidator");
+            services.AddKeyedScoped<IValidator<ForgetPasswordDto>, ForgetPasswordResetValidator>("ForgetPasswordReset");
         }
     }
 }

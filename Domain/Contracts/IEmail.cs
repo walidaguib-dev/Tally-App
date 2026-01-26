@@ -9,7 +9,8 @@ namespace Domain.Contracts
     public interface IEmail
     {
         public Task<EmailToken?> SendEmail(string userId ,  VerificationPurpose purpose);
-        public Task CreateEmailAsync(string recipientEmail, string subject, string userId , string token);
+        public Task CreateEmailAsync(string recipientEmail, string subject, string userId , string token ,VerificationPurpose purpose);
         public Task<object?> ConfirmEmailAsync(string userId, string token);
+        
     }
 }

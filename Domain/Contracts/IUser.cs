@@ -12,7 +12,7 @@ namespace Domain.Contracts
         public Task<User> CreateUser(User user , string password,string role);
         public Task<User?> SignIn(string username , string password);
         public Task<User?> ResetPassword(string userId, string current_password, string new_password);
-        public Task<User> VerifyAccount(User user);
+        public Task<User?> ForgetPasswordReset(string userId , string token , string new_password);
         public Task<List<User>> GetAllUsers();
 
     }

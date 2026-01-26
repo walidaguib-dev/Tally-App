@@ -1,5 +1,6 @@
 ﻿using Application.Commands.Emails;
 using Application.Dtos.Mail;
+using Application.Mappers;
 using Domain.Contracts;
 using Domain.helpers;
 using FluentValidation;
@@ -32,7 +33,7 @@ namespace API.Controllers
                 {
                     return Unauthorized();
                 }
-                return Ok(response);
+                return Ok(response.MapToEmailJson());
             }
             catch (ValidationException e)
             {

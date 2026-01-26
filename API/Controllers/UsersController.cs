@@ -7,6 +7,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace API.Controllers
 {
@@ -20,25 +21,54 @@ namespace API.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> RegisterUser([FromBody] RegisterUserDto dto)
         {
-            var command = new RegisterUserCommand(dto);
-            var result = await _mediator.Send(command);
-            return CreatedAtAction(nameof(RegisterUser), new { id = result.Id }, result.MapToUserDto());
+            try
+            {
+                var command = new RegisterUserCommand(dto);
+                var result = await _mediator.Send(command, HttpContext.RequestAborted);
+                return Created();
+            } catch (ValidationException e)
+            {
+                return BadRequest(new ValidationErrorResponse
+                {
+                    Errors = [.. e.Errors.Select(err => err.ErrorMessage)]
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
 
         [HttpPost("signin")]
+        [EnableRateLimiting("Auth")]
         public async Task<IActionResult> SignIn([FromBody] SignInDto dto)
         {
-            var command = new SignInCommand(dto);
-            var result = await _mediator.Send(command);
-            return Ok(result);
+            try
+            {
+                var command = new SignInCommand(dto);
+                var result = await _mediator.Send(command, HttpContext.RequestAborted);
+                return Ok(result);
+            }
+            catch (ValidationException e)
+            {
+                return BadRequest(new ValidationErrorResponse
+                {
+                    Errors = [.. e.Errors.Select(err => err.ErrorMessage)]
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
 
         [HttpGet]
         [Authorize]
+        [EnableRateLimiting("Default")]
         public async Task<IActionResult> GetAllUsers()
         {
             var query = new Application.Queries.Users.GetAllUsersQuery();
-            var result = await _mediator.Send(query);
+            var result = await _mediator.Send(query, HttpContext.RequestAborted);
             return Ok(result);
         }
 
@@ -49,7 +79,7 @@ namespace API.Controllers
             try
             {
                 var command = new PasswordResetCommand(dto);
-                var result = await _mediator.Send(command);
+                var result = await _mediator.Send(command, HttpContext.RequestAborted);
                 if (result == null)
                 {
                     return NotFound(new { message = "User not found" });
@@ -68,7 +98,30 @@ namespace API.Controllers
                 return BadRequest(new { message = ex.Message });
             }
 
-            
+
+        }
+
+        [HttpPost("forget-password")]
+        [EnableRateLimiting("Auth")]
+        public async Task<IActionResult> ForgetPassword([FromBody] ForgetPasswordDto dto)
+        {
+            try
+            {
+                var command = new ForgetPasswordCommand(dto);
+                var result = await _mediator.Send(command, HttpContext.RequestAborted);
+                return Ok(result);
+            }
+            catch (ValidationException e)
+            {
+                return BadRequest(new ValidationErrorResponse
+                {
+                    Errors = [.. e.Errors.Select(err => err.ErrorMessage)]
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
     }
 }

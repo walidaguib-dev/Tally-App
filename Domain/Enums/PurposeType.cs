@@ -4,7 +4,6 @@ namespace Domain.Enums
     {
         EmailVerification,
         PasswordReset,
-        TwoFactorAuth,
         ChangeEmail
     }
 

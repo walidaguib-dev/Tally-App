@@ -28,9 +28,9 @@ namespace Application.Handlers.Users
             if (!validationResult.IsValid)
             {
                 throw new ValidationException(validationResult.Errors);
+
             }
             var result = await _usersService.SignIn(request.Dto.username, request.Dto.password);
-
             var tokenResult = await _tokensService.GenerateRefreshToken(result!);
 
             RefreshTokenRequest tokenRequest = new()

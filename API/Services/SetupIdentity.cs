@@ -16,6 +16,12 @@ namespace API.Services
                 options.Password.RequiredLength = 12;
                 options.User.RequireUniqueEmail = true;
 
+                // Lockout settings
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15); // how long user stays locked
+                options.Lockout.MaxFailedAccessAttempts = 5; // number of tries before lockout
+                options.Lockout.AllowedForNewUsers = true; // apply lockout to new accounts
+
+
             })
                     .AddEntityFrameworkStores<ApplicationDbContext>()
                     .AddRoles<IdentityRole>()

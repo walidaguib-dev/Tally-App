@@ -25,7 +25,7 @@ namespace Application.Handlers.Users
 
         public async Task<User> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
         {
-            ValidationResult? result = await _validator.ValidateAsync(request.Dto);
+            ValidationResult? result = await _validator.ValidateAsync(request.Dto, cancellationToken);
             if(result.IsValid)
             {
                 var user = request.Dto.MapToUser();
