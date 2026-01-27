@@ -21,6 +21,7 @@ builder.Services.AddAuthenticationServices(builder);
 builder.Services.AddAuthorization();
 builder.Services.AddRateLimitingServices();
 builder.Services.ConfigureRedisServices(builder.Configuration);
+builder.Services.ConfigureCloudinary(builder);
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

@@ -14,6 +14,8 @@ namespace Infrastructure.Data
         }
         public DbSet<RefreshToken> refreshTokens { get; set; }
         public DbSet<EmailToken> emailTokens { get; set; }
+        public DbSet<UserProfile> profiles { get; set; }
+        public DbSet<Uploads> uploads { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
