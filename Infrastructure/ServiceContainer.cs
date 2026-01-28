@@ -13,13 +13,7 @@ namespace Infrastructure
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services , WebApplicationBuilder builder)
         {
-            //services.ConfigureCloudinary(builder);
-            ////services.AddAuthenticationServices(builder);
-            //services.ConfigureRedisServices(builder.Configuration);
-            //services.ConfigureEmailService(builder);
-            //services.ConfigureBackgroundJobs(builder);
-            //services.AddDatabase(builder.Configuration);
-            // Register infrastructure services here
+            
             return services;
         }
     }

@@ -12,6 +12,7 @@ namespace API.Services
             services.AddScoped<IEmail, EmailsRepository>();
             services.AddScoped<ICaching , CachingRepository>();
             services.AddScoped<IUploads, UploadsRepository>();
+            services.AddScoped<IUserProfile , UserProfilesRepository>();
             // Register API services here
             return services;
         }
