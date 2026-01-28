@@ -41,7 +41,7 @@ namespace Infrastructure.Repositories
             return profile;
         }
 
-        public async Task<UserProfile?> UpdateProfile(string userId, string Firstname, string Lastname, string? Bio, int uploadId)
+        public async Task<UserProfile?> UpdateProfile(string userId, string Firstname, string Lastname, string? Bio)
         {
             var profile = await _context.profiles
                 .Include(p => p.Upload)
@@ -51,7 +51,6 @@ namespace Infrastructure.Repositories
             profile.FirstName = Firstname;
             profile.LastName = Lastname;
             profile.Bio = Bio;
-            profile.UploadId = uploadId;
             profile.UpdatedAt = DateTime.UtcNow;
             await _context.SaveChangesAsync();
             await _cachingService.RemoveCaching($"user_profile_{userId}");

@@ -12,6 +12,5 @@ namespace Application.Dtos.Users.Profiles
         public string LastName { get; set; } = string.Empty;
         public string? Bio { get; set; }
         public DateTime? UpdatedAt { get; set; } = DateTime.UtcNow;
-        public int UploadId { get; set; }
     }
 }

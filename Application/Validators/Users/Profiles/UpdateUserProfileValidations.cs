@@ -19,8 +19,7 @@ namespace Application.Validators.Users.Profiles
             RuleFor(x => x.Bio)
                 .MaximumLength(500).WithMessage("Bio cannot exceed 500 characters.")
                 .When(x => x.Bio != null && x.Bio != string.Empty);
-            RuleFor(x => x.UploadId)
-                .NotNull().GreaterThan(0).WithMessage("Upload ID is required.");
+
         }
     }
 

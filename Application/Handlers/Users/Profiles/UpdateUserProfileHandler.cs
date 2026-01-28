@@ -28,8 +28,7 @@ namespace Application.Handlers.Users.Profiles
             var firstname = request.Dto.FirstName!.Trim();
             var lastname = request.Dto.LastName!.Trim();
             var bio = request.Dto.Bio?.Trim();
-            var uploadId = request.Dto.UploadId;
-            var updatedProfile = await _userProfileService.UpdateProfile(request.userId,firstname,lastname,bio, uploadId);
+            var updatedProfile = await _userProfileService.UpdateProfile(request.userId,firstname,lastname,bio);
             if(updatedProfile == null)
             {
                 throw new Exception("Failed to update user profile.");

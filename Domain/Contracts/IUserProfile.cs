@@ -9,6 +9,6 @@ namespace Domain.Contracts
     {
         public Task<UserProfile> CreateProfile(UserProfile profile);
         public Task<UserProfile?> GetProfileByUserId(string userId);
-        public Task<UserProfile?> UpdateProfile(string userId , string Firstname , string Lastname , string? Bio,int uploadId);
+        public Task<UserProfile?> UpdateProfile(string userId , string Firstname , string Lastname , string? Bio);
     }
 }

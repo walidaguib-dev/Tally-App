@@ -36,6 +36,8 @@ namespace Application.Mappers
                 CreatedAt = entity.CreatedAt,
                 UpdatedAt = entity.UpdatedAt,
                 UploadId = entity.UploadId,
+                url = entity.Upload!.Url,
+                username = entity.User.UserName!,
             };
         }
     }
