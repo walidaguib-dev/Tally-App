@@ -10,5 +10,9 @@ namespace Domain.Contracts
     {
         public Task<object> UploadImageAsync(IFormFile file);
         public Task<Uploads> UploadsAsync(string userId , IFormFile file);
+        public Task<object> DeleteUploadAsync(string publicId);
+        public Task<Uploads?> UpdateAsync(string userId, IFormFile file, string oldPublicId);
+        public Task<List<Uploads>> GetAllFilesByUserAsync(string userId);
+        public Task<Uploads?> GetUploadByUserAsync(string userId);
     }
 }

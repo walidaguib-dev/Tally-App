@@ -10,6 +10,6 @@ namespace Domain.Entities
         public RefreshToken refreshToken { get; set; }
         public UserProfile profile { get; set; }
         public List<EmailToken> EmailTokens { get; set; } = new List<EmailToken>();
-        public Uploads Upload { get; set; }
+        public List<Uploads> Upload { get; set; } = [];
     }
 }
