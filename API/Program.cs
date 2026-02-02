@@ -3,12 +3,14 @@ using Application;
 using Hangfire;
 using Infrastructure;
 using Infrastructure.Services;
+using Serilog;
 
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
+builder.Services.AddLoggingConfiguration(builder.Configuration);
 builder.Services.AddApplication().AddInfrastructure(builder);
 builder.Services.AddAPIServices();
 builder.Services.AddValidations();
@@ -21,6 +23,9 @@ builder.Services.ConfigureBackgroundJobs(builder);
 builder.Services.AddAuthenticationServices(builder);
 builder.Services.AddAuthorization();
 builder.Services.AddRateLimitingServices();
+
+
+builder.Host.UseSerilog();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -30,9 +35,11 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
 app.UseRateLimiter();
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseSerilogRequestLogging();
 app.MapControllers();
 app.UseHangfireDashboard("/hangfire");
 app.Run();
