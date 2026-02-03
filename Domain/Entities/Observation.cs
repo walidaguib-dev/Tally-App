@@ -14,13 +14,13 @@ namespace Domain.Entities
 
         // Relationships (flexible)
         public int? TallySheetId { get; set; }
-        public TallySheet TallySheet { get; set; } = null!;
+        public TallySheet? TallySheet { get; set; } 
 
         public int? TallySheetMerchandiseId { get; set; }
-        public TallySheetMerchandise TallySheetMerchandise { get; set; } = null!;
+        public TallySheetMerchandise? TallySheetMerchandise { get; set; } 
 
         public int? TallySheetTruckId { get; set; }
-        public TallySheetTruck TallySheetTruck { get; set; } = null!;
+        public TallySheetTruck? TallySheetTruck { get; set; } 
 
     }
 }

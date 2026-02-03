@@ -11,9 +11,6 @@ namespace Domain.Entities
         public string ImoNumber { get; set; } = string.Empty;
 
         // Relationships
-        public ICollection<TallySheet> TallySheets
-        {
-            get; set;
-        } = [];
+        public List<TallySheet> tallySheets { get; set; } = [];
     }
 }

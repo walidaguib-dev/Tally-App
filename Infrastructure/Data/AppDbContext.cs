@@ -16,6 +16,14 @@ namespace Infrastructure.Data
         public DbSet<EmailToken> emailTokens { get; set; }
         public DbSet<UserProfile> profiles { get; set; }
         public DbSet<Uploads> uploads { get; set; }
+        public DbSet<TallySheet> TallySheets { get; set; }
+        public DbSet<Merchandise> Merchandises { get; set; }
+        public DbSet<Ship> Ships { get; set; }
+        public DbSet<Observation> Observations { get; set; }
+        public DbSet<TallySheetMerchandise> TallySheetMerchandises { get; set; }
+        public DbSet<TallySheetTruck> TallySheetTrucks { get; set; }
+        public DbSet<Truck> Trucks { get; set; }
+        public DbSet<Client> Clients { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);

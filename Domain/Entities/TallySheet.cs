@@ -12,7 +12,6 @@ namespace Domain.Entities
         public int TeamsCount { get; set; }
         public ShiftType Shift { get; set; }
         public ZoneType Zone { get; set; }
-
         // Relationships
         public int ShipId { get; set; }
         public Ship Ship { get; set; } = null!;
