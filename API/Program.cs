@@ -1,15 +1,17 @@
+using API.Hubs;
 using API.Services;
 using Application;
 using Hangfire;
 using Infrastructure;
 using Infrastructure.Services;
+using Scalar.AspNetCore;
 using Serilog;
 
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
-builder.Services.AddOpenApi();
+builder.Services.AddOpenApi("v1", options => { options.AddDocumentTransformer<OpenApiTransformer>(); });
 builder.Services.AddLoggingConfiguration(builder.Configuration);
 builder.Services.AddApplication().AddInfrastructure(builder);
 builder.Services.AddAPIServices();
@@ -23,6 +25,7 @@ builder.Services.ConfigureBackgroundJobs(builder);
 builder.Services.AddAuthenticationServices(builder);
 builder.Services.AddAuthorization();
 builder.Services.AddRateLimitingServices();
+builder.Services.AddSignalR();
 
 
 builder.Host.UseSerilog();
@@ -32,6 +35,18 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.MapScalarApiReference(options =>
+    {
+        options.Title = "Tally API";
+        options.DarkMode = true;
+        options.DefaultHttpClient = new(ScalarTarget.CSharp, ScalarClient.HttpClient);
+        app.MapScalarApiReference(options => options
+    .AddPreferredSecuritySchemes("Bearer")
+    .AddHttpAuthentication("Bearer", auth =>
+    {
+        auth.Token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...";
+    }));
+    });
 }
 
 app.UseHttpsRedirection();
@@ -42,4 +57,5 @@ app.UseAuthorization();
 app.UseSerilogRequestLogging();
 app.MapControllers();
 app.UseHangfireDashboard("/hangfire");
+app.MapHub<NotificationsHub>("hubs/notifications");
 app.Run();
