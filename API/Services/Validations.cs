@@ -8,6 +8,8 @@ using FluentValidation;
 using EcommerceApi.validations.Users;
 using Application.Dtos.Users.Profiles;
 using Application.Validators.Users.Profiles;
+using Application.Dtos.Ships;
+using Application.Validators.Ships;
 
 namespace API.Services
 {
@@ -26,6 +28,9 @@ namespace API.Services
             //register user profile validations
             services.AddKeyedScoped<IValidator<CreateUserProfileDto>, CreateUserProfileValidations>("CreateUserProfile");
             services.AddKeyedScoped<IValidator<UpdateUserProfileDto>, UpdateUserProfileValidations>("UpdateUserProfile");
+            // register ships validations
+             services.AddKeyedScoped<IValidator<CreateShipDto>, CreateShipValidation>("createShip");
+             services.AddKeyedScoped<IValidator<UpdateShipDto>, UpdateShipValidation>("updateShip");
         }
     }
 }
