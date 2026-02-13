@@ -14,6 +14,7 @@ namespace API.Services
             services.AddScoped<IUploads, UploadsRepository>();
             services.AddScoped<IUserProfile , UserProfilesRepository>();
             services.AddScoped<IShips, ShipsRepository>();
+            services.AddScoped<IMerchandise, MerchandisesRepository>();
             // Register API services here
             return services;
         }

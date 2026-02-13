@@ -10,6 +10,8 @@ using Application.Dtos.Users.Profiles;
 using Application.Validators.Users.Profiles;
 using Application.Dtos.Ships;
 using Application.Validators.Ships;
+using Application.Dtos.Merchandises;
+using Application.Validators.Merchandises;
 
 namespace API.Services
 {
@@ -31,6 +33,10 @@ namespace API.Services
             // register ships validations
              services.AddKeyedScoped<IValidator<CreateShipDto>, CreateShipValidation>("createShip");
              services.AddKeyedScoped<IValidator<UpdateShipDto>, UpdateShipValidation>("updateShip");
+            // register Merchandise validations
+            services.AddKeyedScoped<IValidator<CreateMerchandiseDto>, CreateMerchandiseValidation>("createMerchandise");
+            services.AddKeyedScoped<IValidator<UpdateMerchandiseDto>, UpdateMerchandiseValidation>("updateMerchandise");
+
         }
     }
 }

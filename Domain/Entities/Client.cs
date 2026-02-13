@@ -9,6 +9,7 @@ namespace Domain.Entities
         public int Id { get; set; }
         public string Name { get; set; } = null!;
         public string ContactInfo { get; set; } = null!;
+        public List<string> Bill_Of_Lading { get; set; } = [];
 
         // Relationships
         public int MerchandiseId { get; set; }

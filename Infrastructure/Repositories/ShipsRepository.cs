@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
+using ZiggyCreatures.Caching.Fusion;
 
 namespace Infrastructure.Repositories
 {
@@ -14,13 +16,12 @@ namespace Infrastructure.Repositories
         ) : IShips
     {
         private readonly ApplicationDbContext _context = context;
-            private readonly ICaching _cachingService = cachingService;
+        private readonly ICaching _cachingService = cachingService;
         public async Task<Ship> CreateShip(Ship ship)
         {
              await  _context.Ships.AddAsync(ship);
              await _context.SaveChangesAsync();
-            await _cachingService.RemoveByPattern("ships");
-            await _cachingService.RemoveByPattern("ship");
+            await _cachingService.RemoveCaching("ships");
             return ship;
         }
 
@@ -28,37 +29,36 @@ namespace Infrastructure.Repositories
         {
             var ship = await _context.Ships.FindAsync(id);
             if (ship == null) return null;
-            await _cachingService.RemoveByPattern("ships");
-            await _cachingService.RemoveByPattern("ship");
             _context.Ships.Remove(ship);
             await _context.SaveChangesAsync();
+            await _cachingService.RemoveCaching("ships");
+            await _cachingService.RemoveCaching($"ship_{id}");
             return ship;
         }
 
         public async Task<List<Ship>> GetAllShips()
         {
-            var cachedShips = await _cachingService.GetFromCacheAsync<List<Ship>>("ships");
-            if(cachedShips != null)
-            {
-                return cachedShips;
-            }
-            var ships = await _context.Ships.ToListAsync();
-            await _cachingService.SetAsync("ships", ships, TimeSpan.FromMinutes(30));
-            return ships;
+            var key = "ships";
+            var cachedShips = await _cachingService.GetOrSetAsync(
+                key,
+                async token => await _context.Ships.ToListAsync()
+                , 
+                TimeSpan.FromMinutes(10));
 
+            if (cachedShips is null) return [];
+
+            return cachedShips;
         }
 
         public async Task<Ship?> GetShipById(int id)
         {
-            var cachedShips = await _cachingService.GetFromCacheAsync<Ship>("ship");
-            if (cachedShips != null)
-            {
-                return cachedShips;
-            }
-            var ship = await _context.Ships.FindAsync(id);
-            if (ship == null) return null;
-            await _cachingService.SetAsync("ship", ship, TimeSpan.FromMinutes(30));
-            return ship;
+            var key = $"ship_{id}";
+            
+            var cachedShip = await _cachingService.GetOrSetAsync(key, 
+                async token => await _context.Ships.FirstOrDefaultAsync(s => s.Id == id,cancellationToken:token), 
+                TimeSpan.FromMinutes(10));
+            if (cachedShip is null) return null;
+            return cachedShip;
         }
 
         public async Task<Ship?> UpdateShip(int id, string Name, string IMO)
@@ -68,8 +68,8 @@ namespace Infrastructure.Repositories
             ship.Name = Name;
             ship.ImoNumber = IMO;
             await _context.SaveChangesAsync();
-            await _cachingService.RemoveByPattern("ships");
-            await _cachingService.RemoveByPattern("ship");
+            await _cachingService.RemoveCaching("ships");
+            await _cachingService.RemoveCaching($"ship_{id}");
             return ship;
         }
     }

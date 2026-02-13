@@ -5,40 +5,38 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using ZiggyCreatures.Caching.Fusion;
 
 namespace Infrastructure.Repositories
 {
     public class UserProfilesRepository(
-        ICaching cachingService,
-        ApplicationDbContext context
+
+        ApplicationDbContext context,
+        ICaching cachingService
         ) : IUserProfile
     {
-        private readonly ICaching _cachingService = cachingService;
         private readonly ApplicationDbContext _context = context;
+        private readonly ICaching _cachingService = cachingService;
         public async Task<UserProfile> CreateProfile(UserProfile profile)
         {
             var result = await _context.profiles.AddAsync(profile);
             await _context.SaveChangesAsync();
-            await _cachingService.RemoveByPattern("user_profile");
+            await _cachingService.RemoveCaching("profiles");
             return result.Entity;
         }
 
         public async Task<UserProfile?> GetProfileByUserId(string userId)
         {
-            var key = $"user_profile_{userId}";
-            var cachedProfile = await _cachingService.GetFromCacheAsync<UserProfile>(key);
-            if (cachedProfile != null)
-            {
-                return cachedProfile;
-            }
-
-            var profile = await _context.profiles
+            var key = $"profile_{userId}";
+            var cachedProfile = await _cachingService.GetOrSetAsync(
+                key, 
+                async token => await _context.profiles
                 .Include(p => p.Upload)
                 .Include(p => p.User)
-                .FirstOrDefaultAsync(p => p.UserId == userId);
-            if (profile == null) return null;
-            await _cachingService.SetAsync(key, profile, TimeSpan.FromHours(1));
-            return profile;
+                .FirstOrDefaultAsync(p => p.UserId == userId, cancellationToken: token)
+                , TimeSpan.FromHours(1));
+            if (cachedProfile is null) return null;
+            return cachedProfile;
         }
 
         public async Task<UserProfile?> UpdateProfile(string userId, string Firstname, string Lastname, string? Bio)
@@ -53,7 +51,8 @@ namespace Infrastructure.Repositories
             profile.Bio = Bio;
             profile.UpdatedAt = DateTime.UtcNow;
             await _context.SaveChangesAsync();
-            await _cachingService.RemoveCaching($"user_profile_{userId}");
+            await _cachingService.RemoveCaching("profiles");
+            await _cachingService.RemoveCaching($"profile_{userId}");
             return profile;
         }
     }

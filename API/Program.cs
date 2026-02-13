@@ -25,6 +25,7 @@ builder.Services.ConfigureBackgroundJobs(builder);
 builder.Services.AddAuthenticationServices(builder);
 builder.Services.AddAuthorization();
 builder.Services.AddRateLimitingServices();
+builder.Services.AddFusionCache(builder.Configuration);
 builder.Services.AddSignalR();
 
 

@@ -11,11 +11,12 @@ namespace Infrastructure.Services
     {
         public static IServiceCollection ConfigureRedisServices(this IServiceCollection services, IConfiguration configuration)
         {
-            var redisConfiguration = configuration.GetValue<string>("RedisConnectionString")!;
-            services.AddSingleton<IConnectionMultiplexer>
-           (
-               x => ConnectionMultiplexer.Connect(redisConfiguration)
-           );
+            services.AddStackExchangeRedisCache(options =>
+            {
+                options.Configuration = configuration.GetValue<string>("RedisConnectionString");
+                options.InstanceName = "MyAppCache_";
+            });
+
             return services;
         }
     }
