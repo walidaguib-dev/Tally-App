@@ -21,7 +21,6 @@ namespace Infrastructure.Repositories
         {
              await  _context.Ships.AddAsync(ship);
              await _context.SaveChangesAsync();
-            await _cachingService.RemoveCaching("ships");
             return ship;
         }
 
@@ -31,8 +30,7 @@ namespace Infrastructure.Repositories
             if (ship == null) return null;
             _context.Ships.Remove(ship);
             await _context.SaveChangesAsync();
-            await _cachingService.RemoveCaching("ships");
-            await _cachingService.RemoveCaching($"ship_{id}");
+
             return ship;
         }
 
@@ -68,8 +66,6 @@ namespace Infrastructure.Repositories
             ship.Name = Name;
             ship.ImoNumber = IMO;
             await _context.SaveChangesAsync();
-            await _cachingService.RemoveCaching("ships");
-            await _cachingService.RemoveCaching($"ship_{id}");
             return ship;
         }
     }

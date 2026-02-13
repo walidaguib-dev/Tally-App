@@ -21,7 +21,6 @@ namespace Infrastructure.Repositories
         {
             var result = await _context.profiles.AddAsync(profile);
             await _context.SaveChangesAsync();
-            await _cachingService.RemoveCaching("profiles");
             return result.Entity;
         }
 
@@ -51,8 +50,6 @@ namespace Infrastructure.Repositories
             profile.Bio = Bio;
             profile.UpdatedAt = DateTime.UtcNow;
             await _context.SaveChangesAsync();
-            await _cachingService.RemoveCaching("profiles");
-            await _cachingService.RemoveCaching($"profile_{userId}");
             return profile;
         }
     }

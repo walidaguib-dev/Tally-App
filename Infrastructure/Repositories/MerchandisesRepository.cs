@@ -22,7 +22,6 @@ namespace Infrastructure.Repositories
         {
             await _context.Merchandises.AddAsync(merchandise);
             await _context.SaveChangesAsync();
-            await cache.RemoveCaching("merchandises");
             return merchandise;
         }
 
@@ -34,8 +33,6 @@ namespace Infrastructure.Repositories
                     .ExecuteDeleteAsync();
 
             if (affectedRows == 0) return false;
-            await cache.RemoveCaching("merchandises");
-            await cache.RemoveCaching($"merchandise_{id}");
             return true;
 
         }
@@ -71,9 +68,6 @@ namespace Infrastructure.Repositories
                     .ExecuteUpdateAsync(s => s.SetProperty(n => n.Name , Name).SetProperty( n => n.Type , Type));
 
             if (affectedRows == 0) return false;
-
-            await cache.RemoveCaching("merchandises");
-            await cache.RemoveCaching($"merchandise_{id}");
             return true;
             
         }

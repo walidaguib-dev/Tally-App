@@ -1,6 +1,8 @@
-﻿using Domain.Contracts;
+﻿using Application.Helpers;
+using Domain.Contracts;
 using Domain.Helpers;
 using Infrastructure.Repositories;
+using MediatR;
 namespace API.Services
 {
     public static class SetupServices
@@ -15,6 +17,7 @@ namespace API.Services
             services.AddScoped<IUserProfile , UserProfilesRepository>();
             services.AddScoped<IShips, ShipsRepository>();
             services.AddScoped<IMerchandise, MerchandisesRepository>();
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(CacheInvalidationBehavior<,>));
             // Register API services here
             return services;
         }
