@@ -9,6 +9,7 @@ namespace API.Services
     {
         public static IServiceCollection AddAPIServices(this IServiceCollection services)
         {
+            // custom services 
             services.AddScoped<IUser, UsersRepository>();
             services.AddScoped<ITokens, TokensRepository>();
             services.AddScoped<IEmail, EmailsRepository>();
@@ -17,7 +18,10 @@ namespace API.Services
             services.AddScoped<IUserProfile , UserProfilesRepository>();
             services.AddScoped<IShips, ShipsRepository>();
             services.AddScoped<IMerchandise, MerchandisesRepository>();
+            // pipelines services
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(CacheInvalidationBehavior<,>));
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
+
             // Register API services here
             return services;
         }

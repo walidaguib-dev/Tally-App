@@ -1,9 +1,11 @@
 using API.Hubs;
 using API.Services;
 using Application;
+using FluentValidation;
 using Hangfire;
 using Infrastructure;
 using Infrastructure.Services;
+using Microsoft.AspNetCore.Diagnostics;
 using Scalar.AspNetCore;
 using Serilog;
 
@@ -52,6 +54,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseGlobalExceptionHandling();
 app.UseRateLimiter();
 app.UseAuthentication();
 app.UseAuthorization();

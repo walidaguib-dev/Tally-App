@@ -13,19 +13,14 @@ using System.Text;
 namespace Application.Handlers.Ships
 {
     internal class CreateShipHandler(
-        IShips shipsService,
-        [FromKeyedServices("createShip")] IValidator<CreateShipDto> validator
+        IShips shipsService
         ) : IRequestHandler<CreateShipCommand, Ship>
     {
         private readonly IShips _shipsService = shipsService;
-        private readonly IValidator<CreateShipDto> _validator = validator;
+
         public async Task<Ship> Handle(CreateShipCommand request, CancellationToken cancellationToken)
         {
-            var ValidationResult = await _validator.ValidateAsync(request.Dto);
-            if(!ValidationResult.IsValid)
-            {
-                throw new ValidationException(ValidationResult.Errors);
-            }
+            
 
             var ship = request.Dto.MapToModel();
 

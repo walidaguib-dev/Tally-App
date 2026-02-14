@@ -10,19 +10,14 @@ using Microsoft.Extensions.DependencyInjection;
 namespace Application.Handlers.Users
 {
     public class PasswordResetHandler(
-        IUser _usersService,
-        [FromKeyedServices("PasswordReset")] IValidator<PasswordResetDto> _validator
+        IUser _usersService
         ) : IRequestHandler<PasswordResetCommand, User?>
     {
         private readonly IUser usersService = _usersService;
-        private readonly IValidator<PasswordResetDto> validator = _validator;
+
         public async Task<User?> Handle(PasswordResetCommand request, CancellationToken cancellationToken)
         {
-            var validationResult  = await validator.ValidateAsync(request.Dto);
-            if (!validationResult.IsValid)
-            {
-                throw new ValidationException(validationResult.Errors);
-            }
+            
             var userId = request.Dto.userId;
             var newPassword = request.Dto.new_password;
             var currentPassword = request.Dto.current_password;

@@ -13,19 +13,12 @@ using System.Text;
 namespace Application.Handlers.Users.Profiles
 {
     internal class CreateUserProfileHandler(
-        IUserProfile userProfileService,
-        [FromKeyedServices("CreateUserProfile")] IValidator<CreateUserProfileDto> validator
+        IUserProfile userProfileService
         ) : IRequestHandler<CreateUserProfileCommand, UserProfile>
     {
         private readonly IUserProfile _userProfileService = userProfileService;
-        private readonly IValidator<CreateUserProfileDto> _validator = validator;
         public async Task<UserProfile> Handle(CreateUserProfileCommand request, CancellationToken cancellationToken)
         {
-            var validationResult = await _validator.ValidateAsync(request.Dto, cancellationToken);
-            if (!validationResult.IsValid)
-            {
-                throw new ValidationException(validationResult.Errors);
-            }
             var entity = request.Dto.MapToEntity();
             var createdProfile = await _userProfileService.CreateProfile(entity);
             return createdProfile;

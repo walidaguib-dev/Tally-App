@@ -37,7 +37,7 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Chef")]
+        //[Authorize(Roles = "Chef")]
         public async Task<IActionResult> CreateOne([FromBody] CreateMerchandiseDto dto) {
             try
             {

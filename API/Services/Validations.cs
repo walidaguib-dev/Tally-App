@@ -12,6 +12,12 @@ using Application.Dtos.Ships;
 using Application.Validators.Ships;
 using Application.Dtos.Merchandises;
 using Application.Validators.Merchandises;
+using Application.Commands.Users;
+using Application.Commands.Tokens;
+using Application.Commands.Emails;
+using Application.Commands.Users.Profiles;
+using Application.Commands.ships;
+using Application.Commands.Merchandises;
 
 namespace API.Services
 {
@@ -20,22 +26,25 @@ namespace API.Services
         public static void AddValidations(this IServiceCollection services)
         {
             // register user auth validations
-            services.AddKeyedScoped<IValidator<RegisterUserDto>, RegisterUserValidations>("Register");
-            services.AddKeyedScoped<IValidator<RefreshTokenRequest>, RefreshTokenRequestValidation>("GenerateToken");
-            services.AddKeyedScoped<IValidator<SignInDto>, SignInValidations>("SignIn");
-            services.AddKeyedScoped<IValidator<PasswordResetDto>, PasswordResetValidations>("PasswordReset");
-            services.AddKeyedScoped<IValidator<SendEmailDto>, SendEmailValidation>("EmailValidator");
-            services.AddKeyedScoped<IValidator<ForgetPasswordDto>, ForgetPasswordResetValidator>("ForgetPasswordReset");
+            services.AddValidatorsFromAssembly(typeof(RegisterUserValidations).Assembly);
+            services.AddValidatorsFromAssembly(typeof(RefreshTokenRequestValidation).Assembly);
+            services.AddValidatorsFromAssembly(typeof(SignInValidations).Assembly);
+            services.AddValidatorsFromAssembly(typeof(PasswordResetValidations).Assembly);
+
+            services.AddValidatorsFromAssembly(typeof(SendEmailValidation).Assembly);
+            services.AddValidatorsFromAssembly(typeof(ForgetPasswordResetValidator).Assembly);
 
             //register user profile validations
-            services.AddKeyedScoped<IValidator<CreateUserProfileDto>, CreateUserProfileValidations>("CreateUserProfile");
-            services.AddKeyedScoped<IValidator<UpdateUserProfileDto>, UpdateUserProfileValidations>("UpdateUserProfile");
+            services.AddValidatorsFromAssembly(typeof(CreateUserProfileValidations).Assembly);
+            services.AddValidatorsFromAssembly(typeof(UpdateUserProfileValidations).Assembly);
             // register ships validations
-             services.AddKeyedScoped<IValidator<CreateShipDto>, CreateShipValidation>("createShip");
-             services.AddKeyedScoped<IValidator<UpdateShipDto>, UpdateShipValidation>("updateShip");
+            services.AddValidatorsFromAssembly(typeof(CreateShipValidation).Assembly);
+            services.AddValidatorsFromAssembly(typeof(UpdateShipValidation).Assembly);
+
             // register Merchandise validations
-            services.AddKeyedScoped<IValidator<CreateMerchandiseDto>, CreateMerchandiseValidation>("createMerchandise");
-            services.AddKeyedScoped<IValidator<UpdateMerchandiseDto>, UpdateMerchandiseValidation>("updateMerchandise");
+            services.AddValidatorsFromAssembly(typeof(CreateMerchandiseValidation).Assembly);
+            services.AddValidatorsFromAssembly(typeof(UpdateMerchandiseValidation).Assembly);
+
 
         }
     }
