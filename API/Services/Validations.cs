@@ -18,6 +18,7 @@ using Application.Commands.Emails;
 using Application.Commands.Users.Profiles;
 using Application.Commands.ships;
 using Application.Commands.Merchandises;
+using Application.Validators.Clients;
 
 namespace API.Services
 {
@@ -44,6 +45,10 @@ namespace API.Services
             // register Merchandise validations
             services.AddValidatorsFromAssembly(typeof(CreateMerchandiseValidation).Assembly);
             services.AddValidatorsFromAssembly(typeof(UpdateMerchandiseValidation).Assembly);
+
+            // register clients validations
+            services.AddValidatorsFromAssembly(typeof(CreateClientValidation).Assembly);
+            services.AddValidatorsFromAssembly(typeof(UpdateClientValidation).Assembly);
 
 
         }
