@@ -28,7 +28,7 @@ namespace API.Controllers
         {
             try
             {
-                var response = await _mediator.Send(new SendEmailCommand(dto));
+                var response = await _mediator.Send(new SendEmailCommand(dto), HttpContext.RequestAborted);
                 if (response is null)
                 {
                     return Unauthorized();

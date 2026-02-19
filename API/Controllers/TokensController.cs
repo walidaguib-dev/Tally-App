@@ -16,7 +16,7 @@ namespace API.Controllers
         public async Task<IActionResult> GenerateToken([FromBody] Application.Dtos.Tokens.RefreshTokenRequest dto)
         {
             var command = new GenerateAccessTokenCommand(dto);
-            var result = await _mediator.Send(command);
+            var result = await _mediator.Send(command, HttpContext.RequestAborted);
             return Ok(result);
         }
     }

@@ -24,7 +24,7 @@ namespace API.Controllers
         public async Task<IActionResult> GetAll()
         {
             var query = new GetAllClientsQuery();
-            var result = await mediator.Send(query);
+            var result = await mediator.Send(query, HttpContext.RequestAborted);
             return Ok(result);
         }
 
@@ -32,7 +32,7 @@ namespace API.Controllers
         [Authorize]
         public async Task<IActionResult> GetOne([FromRoute] int id) {
             var query = new GetClientQuery(id);
-            var result = await mediator.Send(query);
+            var result = await mediator.Send(query, HttpContext.RequestAborted);
             if (result is null) return NotFound();
             return Ok(result);
         }
@@ -42,7 +42,7 @@ namespace API.Controllers
         public async Task<IActionResult> CreateOne([FromBody] CreateClientDto dto) {
            
                 var command = new CreateClientCommand(dto);
-                var result = await mediator.Send(command);
+                var result = await mediator.Send(command, HttpContext.RequestAborted);
                 if (result is null) return BadRequest("Unable to create client.");
             return Created();
 
@@ -52,7 +52,7 @@ namespace API.Controllers
         [Authorize(Roles = "Chef")]
         public async Task<IActionResult> UpdateOne([FromRoute] int id , [FromBody] UpdateClientDto dto) {
              var command = new UpdateClientCommand(id,dto);
-                var result = await mediator.Send(command);
+                var result = await mediator.Send(command, HttpContext.RequestAborted);
             return result is null ? NotFound() : NoContent();
         }
 
@@ -60,7 +60,7 @@ namespace API.Controllers
         [Authorize(Roles = "Chef")]
         public async Task<IActionResult> DeleteOne([FromRoute] int id) {
             var command = new DeleteClientCommand(id);
-            var result = await mediator.Send(command);
+            var result = await mediator.Send(command, HttpContext.RequestAborted);
             return result is null ? NotFound() : NoContent();
         }
 

@@ -22,7 +22,7 @@ namespace API.Controllers
         [Route("{userId}")]
         public async Task<IActionResult> GetAllByUser([FromRoute] string userId) {
             var query = new GetAllFilesByUserQuery(userId);
-            var result = await _mediator.Send(query);
+            var result = await _mediator.Send(query, HttpContext.RequestAborted);
             return Ok(result);
         }
 
@@ -30,7 +30,7 @@ namespace API.Controllers
         public async Task<IActionResult> GetFileByUser([FromRoute] string userId)
         {
             var query = new GetAllFilesByUserQuery(userId);
-            var result = await _mediator.Send(query);
+            var result = await _mediator.Send(query, HttpContext.RequestAborted);
             if (result == null) return NotFound(new { message = "Upload record not found" });
             return Ok(result);
         }
@@ -42,7 +42,7 @@ namespace API.Controllers
             try
             {
                 var command = new Application.Commands.Uploads.UploadFileCommand(file, userId);
-                var result = await _mediator.Send(command);
+                var result = await _mediator.Send(command, HttpContext.RequestAborted);
                 return Ok(result.ToDto());
             }
             catch (Exception ex)
@@ -57,7 +57,7 @@ namespace API.Controllers
             try
             {
                 var command = new Application.Commands.Uploads.DeleteFileCommand(publicId);
-                var result = await _mediator.Send(command);
+                var result = await _mediator.Send(command, HttpContext.RequestAborted);
                 return Ok(result);
             }
             catch (Exception ex)
@@ -72,7 +72,7 @@ namespace API.Controllers
             try
             {
                 var command = new Application.Commands.Uploads.UpdateFileCommand(userId, file, oldPublicId);
-                var result = await _mediator.Send(command);
+                var result = await _mediator.Send(command, HttpContext.RequestAborted);
                 if (result == null) return NotFound(new { message = "Upload record not found" });
                 return Ok("file updated!");
             }

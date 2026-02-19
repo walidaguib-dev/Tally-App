@@ -14,5 +14,6 @@ namespace Domain.Entities
         public ICollection<TallySheetTruck> TallySheetTrucks { get; set; } = [];
         public ICollection<Observation> Observations { get; set; } = [];
 
+        
     }
 }

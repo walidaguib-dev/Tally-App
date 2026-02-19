@@ -19,7 +19,7 @@ namespace API.Controllers
         public async Task<IActionResult> GetAllShips()
         {
             var query = new Application.Queries.Ships.GetAllShipsQuery();
-            var result = await _mediator.Send(query);
+            var result = await _mediator.Send(query, HttpContext.RequestAborted);
             return Ok(result);
         }
         [HttpGet("{id:int}")]
@@ -27,7 +27,7 @@ namespace API.Controllers
         public async Task<IActionResult> GetShipById(int id)
         {
             var query = new Application.Queries.Ships.GetShipQuery(id);
-            var result = await _mediator.Send(query);
+            var result = await _mediator.Send(query, HttpContext.RequestAborted);
             if (result == null)
             {
                 return NotFound();
@@ -40,7 +40,7 @@ namespace API.Controllers
         public async Task<IActionResult> CreateShip([FromBody] Application.Dtos.Ships.CreateShipDto dto)
         {
             var command = new Application.Commands.ships.CreateShipCommand(dto);
-            var result = await _mediator.Send(command);
+            var result = await _mediator.Send(command, HttpContext.RequestAborted);
             return Created();
         }
 
@@ -49,7 +49,7 @@ namespace API.Controllers
         public async Task<IActionResult> UpdateShip(int id, [FromBody] Application.Dtos.Ships.UpdateShipDto dto)
         {
             var command = new Application.Commands.ships.UpdateShipCommand(id, dto);
-            var result = await _mediator.Send(command);
+            var result = await _mediator.Send(command, HttpContext.RequestAborted);
             if (result == null)
             {
                 return NotFound();
@@ -62,7 +62,7 @@ namespace API.Controllers
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
             var command = new Application.Commands.ships.DeleteShipCommand(id);
-            var result = await _mediator.Send(command);
+            var result = await _mediator.Send(command, HttpContext.RequestAborted);
             if (result == null)
             {
                 return NotFound();

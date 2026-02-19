@@ -23,7 +23,7 @@ namespace API.Controllers
         public async Task<IActionResult> GetUserProfile([FromRoute] string userId)
         {
             var query = new GetUserProfileQuery(userId);
-            var profileDto = await _mediator.Send(query);
+            var profileDto = await _mediator.Send(query, HttpContext.RequestAborted);
             if (profileDto == null)
                 return NotFound($"Profile for user {userId} not found.");
 
@@ -34,7 +34,7 @@ namespace API.Controllers
         public async Task<IActionResult> CreateProfile([FromBody] CreateUserProfileDto dto)
         {
             var command = new CreateUserProfileCommand(dto);
-            var createdProfile = await _mediator.Send(command);
+            var createdProfile = await _mediator.Send(command, HttpContext.RequestAborted);
             return Created();
         }
 
@@ -42,7 +42,7 @@ namespace API.Controllers
         public async Task<IActionResult> UpdateUserProfile([FromRoute] string userId, [FromBody] UpdateUserProfileDto dto)
         {
             var command = new UpdateUserProfileCommand(dto,userId);
-            var updatedProfile = await _mediator.Send(command);
+            var updatedProfile = await _mediator.Send(command, HttpContext.RequestAborted);
             if(updatedProfile == null)
                 return NotFound($"Failed to update profile for user {userId}.");
             return Ok("profile updated!");

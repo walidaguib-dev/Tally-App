@@ -24,7 +24,7 @@ namespace API.Controllers
         public async Task<IActionResult> GetAll()
         {
             var query = new GetAllMerchandisesQuery();
-            var response = await _mediator.Send(query);
+            var response = await _mediator.Send(query, HttpContext.RequestAborted);
             return Ok(response);
         }
 
@@ -32,7 +32,7 @@ namespace API.Controllers
         [Authorize]
         public async Task<IActionResult> GetOne([FromRoute] int id) {
             var query = new GetMerchandiseQuery(id);
-            var response = await _mediator.Send(query);
+            var response = await _mediator.Send(query, HttpContext.RequestAborted);
             return Ok(response);
         }
 
@@ -42,7 +42,7 @@ namespace API.Controllers
             try
             {
                 var command = new CreateMerchandiseCommand(dto);
-                var response = await _mediator.Send(command);
+                var response = await _mediator.Send(command, HttpContext.RequestAborted);
                 return Created();
             }
             catch (ValidationException e)
@@ -63,7 +63,7 @@ namespace API.Controllers
             try
             {
                 var command = new UpdateMerchandiseCommand(id,dto);
-                var response = await _mediator.Send(command);
+                var response = await _mediator.Send(command, HttpContext.RequestAborted);
                 return Ok("updated!");
             }
             catch (ValidationException e)
@@ -86,7 +86,7 @@ namespace API.Controllers
             try
             {
                 var command = new DeleteMerchandiseCommand(id);
-                var response = await _mediator.Send(command);
+                var response = await _mediator.Send(command, HttpContext.RequestAborted);
                 return Ok("deleted!");
             }
             catch (Exception e)
