@@ -11,5 +11,7 @@ namespace Application.Commands.Clients
     public record CreateClientCommand(CreateClientDto Dto) : IRequest<Client>, IInvalidateCache
     {
         public List<string> CacheKeys => ["clients"];
+
+        public List<string> CacheTags => ["clients"];
     }
 }

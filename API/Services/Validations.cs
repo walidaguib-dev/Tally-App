@@ -20,6 +20,8 @@ using Application.Commands.ships;
 using Application.Commands.Merchandises;
 using Application.Validators.Clients;
 using Application.Validators.Trucks;
+using Application.Validators.TallySheets;
+using Application.Validators.Pagination;
 
 namespace API.Services
 {
@@ -50,12 +52,18 @@ namespace API.Services
             // register clients validations
             services.AddValidatorsFromAssembly(typeof(CreateClientValidation).Assembly);
             services.AddValidatorsFromAssembly(typeof(UpdateClientValidation).Assembly);
+            services.AddValidatorsFromAssembly(typeof(ClientsFilteringValidation).Assembly);
 
             //register trucks validations
             services.AddValidatorsFromAssembly(typeof(CreateTruckValidation).Assembly);
             services.AddValidatorsFromAssembly(typeof(UpdateTruckValidation).Assembly);
 
+            // register tally sheets validations 
+            services.AddValidatorsFromAssembly(typeof(CreateTallySheetDtoValidator).Assembly);
+            services.AddValidatorsFromAssembly(typeof(UpdatetallySheetValidation).Assembly);
 
+            // register pagination validations
+            services.AddValidatorsFromAssembly(typeof(PaginationParamsValidator).Assembly);
         }
     }
 }

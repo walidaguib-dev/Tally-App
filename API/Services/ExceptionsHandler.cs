@@ -5,7 +5,7 @@ namespace API.Services
 {
     public static class ExceptionsHandler
     {
-        public static IApplicationBuilder UseGlobalExceptionHandling(this IApplicationBuilder builder)
+        public static IApplicationBuilder UseGlobalExceptionHandling(this IApplicationBuilder builder, IHostEnvironment environment)
         {
             builder.UseExceptionHandler(errorApp =>
             {
@@ -23,7 +23,19 @@ namespace API.Services
                     else
                     {
                         context.Response.StatusCode = StatusCodes.Status500InternalServerError;
-                        await context.Response.WriteAsJsonAsync(new { error = "An unexpected error occurred." });
+                        if (environment.IsDevelopment())
+                        {
+                            await context.Response.WriteAsJsonAsync(new
+                            {
+                                error = exception?.Message,
+                                stackTrace = exception?.StackTrace,
+                                innerException = exception?.InnerException?.Message
+                            });
+                        }
+                        else
+                        {
+                            await context.Response.WriteAsJsonAsync(new { error = "An unexpected error occurred." });
+                        }
                     }
                 });
             });

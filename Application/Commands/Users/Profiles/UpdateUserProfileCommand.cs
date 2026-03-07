@@ -10,6 +10,7 @@ namespace Application.Commands.Users.Profiles
 {
     public record UpdateUserProfileCommand(UpdateUserProfileDto Dto, string userId) : IRequest<UserProfile>, IInvalidateCache
     {
-        public List<string> CacheKeys => ["profiles", $"profile_{userId}"]; 
+        public List<string> CacheKeys => ["profiles", $"profile_{userId}"];
+        public List<string> CacheTags => ["profiles"];
     }
 }

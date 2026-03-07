@@ -11,5 +11,6 @@ namespace Application.Commands.Trucks
     public record CreateTruckCommand(CreateTruckDto Dto) : IRequest<Truck>, IInvalidateCache
     {
         public List<string> CacheKeys => ["trucks"];
+        public List<string> CacheTags => ["trucks"];
     }
 }

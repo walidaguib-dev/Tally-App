@@ -16,6 +16,9 @@ namespace Domain.Entities
         public int ShipId { get; set; }
         public Ship Ship { get; set; } = null!;
 
+        public string UserId { get; set; } = null!;
+        public User User { get; set; } = null!;
+
         public ICollection<TallySheetMerchandise> TallySheetMerchandises { get; set; } = [];
         public ICollection<TallySheetTruck> TallySheetTrucks { get; set; } = [];
         public ICollection<Observation> Observations { get; set; } = [];

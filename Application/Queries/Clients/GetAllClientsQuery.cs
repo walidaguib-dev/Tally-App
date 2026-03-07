@@ -3,8 +3,9 @@ using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Domain.Helpers.Pagination;
 
 namespace Application.Queries.Clients
 {
-    public record GetAllClientsQuery : IRequest<List<ClientsDto>>;
+    public record GetAllClientsQuery(ClientsQueryDto dto) : IRequest<List<ClientsDto>>;
 }

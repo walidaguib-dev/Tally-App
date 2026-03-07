@@ -40,10 +40,10 @@ namespace Infrastructure.Repositories
             return "Done";
         }
 
-        public async Task CreateEmailAsync(string recipientEmail, string subject, string userId , string token , VerificationPurpose purpose)
+        public async Task CreateEmailAsync(string recipientEmail, string subject, string userId, string token, VerificationPurpose purpose)
         {
             var _bodyBuilder = new EmailVerificationBodyBuilder(_configuration);
-            var result = _bodyBuilder.GenerateBody(userId, token,purpose);
+            var result = _bodyBuilder.GenerateBody(userId, token, purpose);
 
             // Send email using FluentEmail
             await FluentEmail

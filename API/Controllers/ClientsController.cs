@@ -21,16 +21,18 @@ namespace API.Controllers
 
         [HttpGet]
         [Authorize]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] ClientsQueryDto queryDto)
         {
-            var query = new GetAllClientsQuery();
+
+            var query = new GetAllClientsQuery(queryDto);
             var result = await mediator.Send(query, HttpContext.RequestAborted);
             return Ok(result);
         }
 
         [HttpGet("{id:int}")]
         [Authorize]
-        public async Task<IActionResult> GetOne([FromRoute] int id) {
+        public async Task<IActionResult> GetOne([FromRoute] int id)
+        {
             var query = new GetClientQuery(id);
             var result = await mediator.Send(query, HttpContext.RequestAborted);
             if (result is null) return NotFound();
@@ -39,26 +41,29 @@ namespace API.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Chef")]
-        public async Task<IActionResult> CreateOne([FromBody] CreateClientDto dto) {
-           
-                var command = new CreateClientCommand(dto);
-                var result = await mediator.Send(command, HttpContext.RequestAborted);
-                if (result is null) return BadRequest("Unable to create client.");
+        public async Task<IActionResult> CreateOne([FromBody] CreateClientDto dto)
+        {
+
+            var command = new CreateClientCommand(dto);
+            var result = await mediator.Send(command, HttpContext.RequestAborted);
+            if (result is null) return BadRequest("Unable to create client.");
             return Created();
 
         }
 
         [HttpPatch("{id:int}")]
         [Authorize(Roles = "Chef")]
-        public async Task<IActionResult> UpdateOne([FromRoute] int id , [FromBody] UpdateClientDto dto) {
-             var command = new UpdateClientCommand(id,dto);
-                var result = await mediator.Send(command, HttpContext.RequestAborted);
+        public async Task<IActionResult> UpdateOne([FromRoute] int id, [FromBody] UpdateClientDto dto)
+        {
+            var command = new UpdateClientCommand(id, dto);
+            var result = await mediator.Send(command, HttpContext.RequestAborted);
             return result is null ? NotFound() : NoContent();
         }
 
         [HttpDelete("{id:int}")]
         [Authorize(Roles = "Chef")]
-        public async Task<IActionResult> DeleteOne([FromRoute] int id) {
+        public async Task<IActionResult> DeleteOne([FromRoute] int id)
+        {
             var command = new DeleteClientCommand(id);
             var result = await mediator.Send(command, HttpContext.RequestAborted);
             return result is null ? NotFound() : NoContent();

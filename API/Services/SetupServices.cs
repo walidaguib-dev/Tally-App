@@ -13,13 +13,14 @@ namespace API.Services
             services.AddScoped<IUser, UsersRepository>();
             services.AddScoped<ITokens, TokensRepository>();
             services.AddScoped<IEmail, EmailsRepository>();
-            services.AddScoped<ICaching , CachingRepository>();
+            services.AddScoped<ICaching, CachingRepository>();
             services.AddScoped<IUploads, UploadsRepository>();
-            services.AddScoped<IUserProfile , UserProfilesRepository>();
+            services.AddScoped<IUserProfile, UserProfilesRepository>();
             services.AddScoped<IShips, ShipsRepository>();
             services.AddScoped<IMerchandise, MerchandisesRepository>();
             services.AddScoped<IClients, ClientsRepository>();
             services.AddScoped<ITrucks, TrucksRepository>();
+            services.AddScoped<ITallySheet, TallySheetsRepository>();
             // pipelines services
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(CacheInvalidationBehavior<,>));
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));

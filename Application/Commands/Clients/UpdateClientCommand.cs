@@ -10,5 +10,6 @@ namespace Application.Commands.Clients
     public record UpdateClientCommand(int id, UpdateClientDto Dto) : IRequest<string?>, IInvalidateCache
     {
         public List<string> CacheKeys => ["clients", $"client_{id}"];
+        public List<string> CacheTags => ["clients"];
     }
 }

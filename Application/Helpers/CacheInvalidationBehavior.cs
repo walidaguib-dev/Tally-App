@@ -9,7 +9,7 @@ namespace Application.Helpers
 {
     public class CacheInvalidationBehavior<TRequest, TResponse>(
         ICaching _cachingService
-        ) : IPipelineBehavior<TRequest, TResponse>
+        ) : IPipelineBehavior<TRequest, TResponse> where TRequest : notnull
     {
         private readonly ICaching cachingService = _cachingService;
         public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
@@ -23,6 +23,11 @@ namespace Application.Helpers
                 foreach (var key in invalidateRequest.CacheKeys)
                 {
                     await cachingService.RemoveCaching(key);
+                }
+
+                foreach (var key in invalidateRequest.CacheTags)
+                {
+                    await cachingService.RemoveByTagAsync(key);
                 }
             }
 

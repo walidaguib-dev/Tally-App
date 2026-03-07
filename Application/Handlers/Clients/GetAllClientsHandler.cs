@@ -14,7 +14,14 @@ namespace Application.Handlers.Clients
         private readonly IClients clientsService = _clientsService;
         public async Task<List<ClientsDto>> Handle(GetAllClientsQuery request, CancellationToken cancellationToken)
         {
-            var result = await clientsService.GetAll();
+            var paginationsParams = new Domain.Helpers.Pagination.PaginationParams
+            {
+                PageNumber = request.dto.PageNumber,
+                PageSize = request.dto.PageSize,
+                IsDescending = request.dto.IsDescending,
+                SortBy = request.dto.SortBy
+            };
+            var result = await clientsService.GetAll(paginationsParams, request.dto.Name);
             var response = result.Select(r => r.MapToJson()).ToList();
             return response;
         }

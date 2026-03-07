@@ -296,6 +296,10 @@ namespace Infrastructure.Migrations
                     b.Property<int>("TeamsCount")
                         .HasColumnType("integer");
 
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("Zone")
                         .IsRequired()
                         .HasColumnType("text");
@@ -303,6 +307,8 @@ namespace Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ShipId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("TallySheets");
                 });
@@ -754,7 +760,15 @@ namespace Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Domain.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Ship");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Domain.Entities.TallySheetMerchandise", b =>

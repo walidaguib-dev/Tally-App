@@ -11,5 +11,6 @@ namespace Application.Commands.ships
     public record UpdateShipCommand(int id, UpdateShipDto Dto) : IRequest<Ship>, IInvalidateCache
     {
         public List<string> CacheKeys => ["ships", $"ship_{id}"];
+        public List<string> CacheTags => ["ships"];
     }
 }

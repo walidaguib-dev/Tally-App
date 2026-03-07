@@ -4,18 +4,20 @@ using Application;
 using FluentValidation;
 using Hangfire;
 using Infrastructure;
+using Infrastructure.Data;
 using Infrastructure.Services;
 using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 using Serilog;
-
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddOpenApi("v1", options => { options.AddDocumentTransformer<OpenApiTransformer>(); });
 builder.Services.AddLoggingConfiguration(builder.Configuration);
-builder.Services.AddApplication().AddInfrastructure(builder);
+builder.Services.AddApplication()
+                .AddInfrastructure(builder);
 builder.Services.AddAPIServices();
 builder.Services.AddValidations();
 builder.Services.AddIdentityServices();
@@ -52,9 +54,17 @@ if (app.Environment.IsDevelopment())
     });
 }
 
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+    await db.Database.MigrateAsync(); // applies any pending migrations
+}
+
+
 app.UseHttpsRedirection();
 
-app.UseGlobalExceptionHandling();
+app.UseGlobalExceptionHandling(app.Environment);
 app.UseRateLimiter();
 app.UseAuthentication();
 app.UseAuthorization();

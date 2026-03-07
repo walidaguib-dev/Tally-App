@@ -11,5 +11,6 @@ namespace Application.Commands.Users.Profiles
     public record CreateUserProfileCommand(CreateUserProfileDto Dto) : IRequest<UserProfile>, IInvalidateCache
     {
         public List<string> CacheKeys => ["profiles"];
+        public List<string> CacheTags => ["profiles"];
     }
 }

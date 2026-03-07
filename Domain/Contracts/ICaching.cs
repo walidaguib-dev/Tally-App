@@ -8,7 +8,10 @@ namespace Domain.Contracts
     {
         public Task<T?> GetOrSetAsync<T>(string key,
              Func<CancellationToken, Task<T>> factory,
-             TimeSpan? expiry = null);
+             TimeSpan? expiry = null,
+             List<string> tags = null!);
         public Task RemoveCaching(string key);
+
+        public Task RemoveByTagAsync(string tag);
     }
 }

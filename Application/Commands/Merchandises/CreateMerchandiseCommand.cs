@@ -11,5 +11,6 @@ namespace Application.Commands.Merchandises
     public record CreateMerchandiseCommand(CreateMerchandiseDto Dto) : IRequest<Merchandise>, IInvalidateCache
     {
         public List<string> CacheKeys => ["merchandises"];
+        public List<string> CacheTags => ["merchandises"];
     }
 }

@@ -24,7 +24,7 @@ namespace Infrastructure.Repositories
         public async Task<T?> GetOrSetAsync<T>(
              string key,
              Func<CancellationToken, Task<T>> factory,
-             TimeSpan? expiry = null)
+             TimeSpan? expiry = null, List<string> tags = null!)
         {
             var options = new FusionCacheEntryOptions
             {
@@ -35,12 +35,15 @@ namespace Infrastructure.Repositories
             return await cache.GetOrSetAsync<T>(
                 key,
                 (ctx, token) => factory(token),
-                default,
-                options
+                options,
+                tags: tags,
+                token: default
             );
         }
 
-
-
+        public async Task RemoveByTagAsync(string tag)
+        {
+            await cache.RemoveByTagAsync(tag);
+        }
     }
 }

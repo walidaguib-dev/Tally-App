@@ -26,7 +26,7 @@ namespace Infrastructure.Repositories
         private readonly ApplicationDbContext _context = context;
         private readonly UserManager<User> _userManager = userManager;
         private readonly IConfiguration _configuration = configuration;
-        public async Task<string?> GenerateAccessToken(string userId , string token)
+        public async Task<string?> GenerateAccessToken(string userId, string token)
         {
             // Fetch the refresh token from DB and ensure it belongs to the user
             var refreshToken = await _context.refreshTokens
@@ -51,7 +51,7 @@ namespace Infrastructure.Repositories
                 new(JwtRegisteredClaimNames.Email, user.Email ?? ""),
 
             };
-          
+
             foreach (var role in roles) { claims.Add(new Claim(ClaimTypes.Role, role)); }
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Key"]!));
