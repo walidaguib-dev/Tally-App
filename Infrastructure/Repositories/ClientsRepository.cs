@@ -48,7 +48,7 @@ namespace Infrastructure.Repositories
             return result is null ? null : result;
         }
 
-        public async Task<List<Client>> GetAll(PaginationParams paginationParams, string? name)
+        public async Task<PagedResult<Client>?> GetAll(PaginationParams paginationParams, string? name)
         {
             var key = $"clients_page{paginationParams.PageNumber}_size{paginationParams.PageSize}_sort{paginationParams.SortBy ?? "none"}_desc{paginationParams.IsDescending}_name{name ?? "all"}";
 
@@ -64,6 +64,8 @@ namespace Infrastructure.Repositories
                     if (!string.IsNullOrEmpty(name))
                         query = query.Where(c => c.Name.Contains(name));
 
+                    var totalCount = await query.CountAsync(cancellationToken: token);
+
                     // Sorting
                     query = paginationParams.SortBy?.ToLower() switch
                     {
@@ -74,16 +76,24 @@ namespace Infrastructure.Repositories
                     };
 
                     // Pagination
-                    return await query
+                    var items = await query
                         .Skip((paginationParams.PageNumber - 1) * paginationParams.PageSize)
                         .Take(paginationParams.PageSize)
                         .ToListAsync(token);
+
+                    return new PagedResult<Client>
+                    {
+                        Items = items,
+                        TotalCount = totalCount, // ← filtered count
+                        PageNumber = paginationParams.PageNumber,
+                        PageSize = paginationParams.PageSize
+                    };
                 },
                 TimeSpan.FromMinutes(10),
                 tags: ["clients"]
             );
+            return result;
 
-            return result is null ? [] : result;
         }
 
         public async Task<object?> UpdateOne(int id, string name, string contact, List<string> Bill_of_lading, int merchandiseId)

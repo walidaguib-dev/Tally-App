@@ -1,4 +1,5 @@
-﻿using Application.Mappers;
+﻿using Application.Dtos.Ships;
+using Application.Mappers;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -16,9 +17,9 @@ namespace API.Controllers
         private readonly IMediator _mediator = mediator;
         [HttpGet]
         [Authorize]
-        public async Task<IActionResult> GetAllShips()
+        public async Task<IActionResult> GetAllShips([FromQuery] ShipsQueryDto queryDto)
         {
-            var query = new Application.Queries.Ships.GetAllShipsQuery();
+            var query = new Application.Queries.Ships.GetAllShipsQuery(queryDto);
             var result = await _mediator.Send(query, HttpContext.RequestAborted);
             return Ok(result);
         }

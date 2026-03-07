@@ -7,5 +7,5 @@ using Domain.Helpers.Pagination;
 
 namespace Application.Queries.Clients
 {
-    public record GetAllClientsQuery(ClientsQueryDto dto) : IRequest<List<ClientsDto>>;
+    public record GetAllClientsQuery(ClientsQueryDto dto) : IRequest<PagedResult<ClientsDto>>;
 }
