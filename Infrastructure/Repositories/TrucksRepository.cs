@@ -1,5 +1,6 @@
 ﻿using Domain.Contracts;
 using Domain.Entities;
+using Domain.Helpers.Pagination;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -29,18 +30,48 @@ namespace Infrastructure.Repositories
                 .ExecuteDeleteAsync();
             if (affectedRow == 0) return null;
             return true;
-           
+
         }
 
-        public async Task<List<Truck>> GetAll()
+        public async Task<PagedResult<Truck>?> GetAll(PaginationParams paginationParams, string? plateNumber)
         {
-            var key = "trucks";
-            var cachedTrucks = await cachingService.GetOrSetAsync(
+            var key = $"trucks_page{paginationParams.PageNumber}_size{paginationParams.PageSize}_sort{paginationParams.SortBy ?? "none"}_desc{paginationParams.IsDescending}_name{plateNumber ?? "all"}";
+            var result = await cachingService.GetOrSetAsync(
                 key,
-                async token => await context.Trucks.ToListAsync(cancellationToken: token),
-                TimeSpan.FromHours(1)
+                async token =>
+                {
+                    var query = context.Trucks.AsQueryable();
+
+                    if (!string.IsNullOrEmpty(plateNumber) || !string.IsNullOrWhiteSpace(plateNumber))
+                        query = query.Where(q => q.PlateNumber == plateNumber);
+
+                    var totalCount = await query.CountAsync(cancellationToken: token);
+
+                    query = paginationParams.SortBy?.ToLower() switch
+                    {
+                        "plateNumber" => paginationParams.IsDescending
+                            ? query.OrderByDescending(c => c.PlateNumber)
+                            : query.OrderBy(c => c.PlateNumber),
+                        _ => query.OrderBy(c => c.Id)
+                    };
+
+                    var items = await query
+                        .Skip((paginationParams.PageNumber - 1) * paginationParams.PageSize)
+                        .Take(paginationParams.PageSize)
+                        .ToListAsync(token);
+
+                    return new PagedResult<Truck>
+                    {
+                        Items = items,
+                        TotalCount = totalCount, // ← filtered count
+                        PageNumber = paginationParams.PageNumber,
+                        PageSize = paginationParams.PageSize
+                    };
+                },
+                TimeSpan.FromHours(1),
+                tags: ["trucks"]
                 );
-            return cachedTrucks is null ? [] : cachedTrucks;
+            return result;
         }
 
         public async Task<Truck?> GetOne(int Id)

@@ -2,6 +2,7 @@
 using Application.Mappers;
 using Application.Queries.Ships;
 using Domain.Contracts;
+using Domain.Entities;
 using Domain.Helpers.Pagination;
 using MediatR;
 using System;
@@ -17,15 +18,10 @@ namespace Application.Handlers.Ships
         private readonly IShips _shipsService = shipsService;
         public async Task<PagedResult<ShipDto>> Handle(GetAllShipsQuery request, CancellationToken cancellationToken)
         {
-            var ships = await _shipsService.GetAllShips(request.QueryDto, request.QueryDto.Name);
+            var result = await _shipsService.GetAllShips(request.QueryDto, request.QueryDto.Name);
 
-            return ships is null ? new PagedResult<ShipDto>() : new PagedResult<ShipDto>
-            {
-                Items = [.. ships!.Items.Select(s => s.MapToJson())],
-                TotalCount = ships.TotalCount,
-                PageNumber = request.QueryDto.PageNumber,
-                PageSize = request.QueryDto.PageSize
-            };
+            return result?.MapToPagedResult<Ship, ShipDto>(s => s.MapToJson())
+                    ?? new PagedResult<ShipDto>();
         }
     }
 }

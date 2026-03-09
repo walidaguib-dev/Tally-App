@@ -11,7 +11,7 @@ namespace Domain.Entities
         public DateTime ExpiresAt { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime? RevokedAt { get; set; }
-        public  string userId { get; set; }
-        public  User user { get; set; }
+        public string userId { get; set; } = null!;
+        public User user { get; set; } = null!;
     }
 }

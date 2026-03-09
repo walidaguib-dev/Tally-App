@@ -2,6 +2,7 @@
 using Application.Mappers;
 using Application.Queries.Clients;
 using Domain.Contracts;
+using Domain.Entities;
 using Domain.Helpers.Pagination;
 using MediatR;
 using System;
@@ -23,14 +24,9 @@ namespace Application.Handlers.Clients
             //     SortBy = request.dto.SortBy
             // };
             var result = await clientsService.GetAll(request.dto, request.dto.Name);
-            var response = result;
-            return response is null ? new PagedResult<ClientsDto>() : new PagedResult<ClientsDto>
-            {
-                Items = [.. result!.Items.Select(c => c.MapToJson())],
-                TotalCount = result.TotalCount,
-                PageNumber = request.dto.PageNumber,
-                PageSize = request.dto.PageSize
-            };
+
+            return result?.MapToPagedResult<Client, ClientsDto>(c => c.MapToJson())
+                        ?? new PagedResult<ClientsDto>();
         }
     }
 }

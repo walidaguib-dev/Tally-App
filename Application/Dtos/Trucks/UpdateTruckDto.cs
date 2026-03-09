@@ -4,5 +4,5 @@ using System.Text;
 
 namespace Application.Dtos.Trucks
 {
-    public record UpdatetTruckDto : CreateTruckDto;
+    public record UpdateTruckDto : CreateTruckDto;
 }

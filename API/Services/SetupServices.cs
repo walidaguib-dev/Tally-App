@@ -22,8 +22,9 @@ namespace API.Services
             services.AddScoped<ITrucks, TrucksRepository>();
             services.AddScoped<ITallySheet, TallySheetsRepository>();
             // pipelines services
-            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(CacheInvalidationBehavior<,>));
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(CacheInvalidationBehavior<,>));
+
 
             // Register API services here
             return services;

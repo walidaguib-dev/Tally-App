@@ -21,16 +21,17 @@ namespace API.Controllers
 
         [HttpGet]
         [Authorize]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] MerchandisesQueryDto dto)
         {
-            var query = new GetAllMerchandisesQuery();
+            var query = new GetAllMerchandisesQuery(dto);
             var response = await _mediator.Send(query, HttpContext.RequestAborted);
             return Ok(response);
         }
 
         [HttpGet("{id:int}")]
         [Authorize]
-        public async Task<IActionResult> GetOne([FromRoute] int id) {
+        public async Task<IActionResult> GetOne([FromRoute] int id)
+        {
             var query = new GetMerchandiseQuery(id);
             var response = await _mediator.Send(query, HttpContext.RequestAborted);
             return Ok(response);
@@ -38,7 +39,8 @@ namespace API.Controllers
 
         [HttpPost]
         //[Authorize(Roles = "Chef")]
-        public async Task<IActionResult> CreateOne([FromBody] CreateMerchandiseDto dto) {
+        public async Task<IActionResult> CreateOne([FromBody] CreateMerchandiseDto dto)
+        {
             try
             {
                 var command = new CreateMerchandiseCommand(dto);
@@ -49,7 +51,8 @@ namespace API.Controllers
             {
                 return BadRequest(new ValidationErrorResponse { Errors = e.Errors.Select(e => e.ErrorMessage) });
 
-            }catch(Exception e)
+            }
+            catch (Exception e)
             {
                 return BadRequest(e.Message);
             }
@@ -58,11 +61,11 @@ namespace API.Controllers
 
         [HttpPatch("{id:int}")]
         [Authorize(Roles = "Chef")]
-        public async Task<IActionResult> UpdateOne([FromRoute] int id,[FromBody] UpdateMerchandiseDto dto)
+        public async Task<IActionResult> UpdateOne([FromRoute] int id, [FromBody] UpdateMerchandiseDto dto)
         {
             try
             {
-                var command = new UpdateMerchandiseCommand(id,dto);
+                var command = new UpdateMerchandiseCommand(id, dto);
                 var response = await _mediator.Send(command, HttpContext.RequestAborted);
                 return Ok("updated!");
             }

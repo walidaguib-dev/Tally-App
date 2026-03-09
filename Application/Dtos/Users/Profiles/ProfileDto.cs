@@ -15,7 +15,7 @@ namespace Application.Dtos.Users.Profiles
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime? UpdatedAt { get; set; }
         public int? UploadId { get; set; }
-        public string url { get; set; }
-        public string username { get; set; }
+        public string url { get; set; } = string.Empty;
+        public string username { get; set; } = string.Empty;
     }
 }

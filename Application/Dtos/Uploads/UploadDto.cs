@@ -14,6 +14,6 @@ namespace Application.Dtos.Uploads
         public string FileType { get; set; } = string.Empty; // e.g., "image/png"
         public long FileSize { get; set; } // in bytes
         public DateTime UploadedAt { get; set; } = DateTime.UtcNow;
-        public string username { get; set; }
+        public string username { get; set; } = string.Empty;
     }
 }

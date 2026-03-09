@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Application.Helpers
 {
-    public class ValidationBehaviour<TRequest, TResponse>(IEnumerable<IValidator<TRequest>> validators) : IPipelineBehavior<TRequest, TResponse>
+    public class ValidationBehaviour<TRequest, TResponse>(IEnumerable<IValidator<TRequest>> validators) : IPipelineBehavior<TRequest, TResponse> where TRequest : notnull
     {
         private readonly IEnumerable<IValidator<TRequest>> _validators = validators;
 

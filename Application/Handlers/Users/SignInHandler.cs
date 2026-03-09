@@ -18,12 +18,12 @@ namespace Application.Handlers.Users
         ) : IRequestHandler<SignInCommand, LoginResponse>
     {
         private readonly IUser _usersService = usersService;
- 
+
         private readonly ITokens _tokensService = tokensService;
 
         public async Task<LoginResponse> Handle(SignInCommand request, CancellationToken cancellationToken)
         {
-            
+
             var result = await _usersService.SignIn(request.Dto.username, request.Dto.password);
             var tokenResult = await _tokensService.GenerateRefreshToken(result!);
 
@@ -33,7 +33,7 @@ namespace Application.Handlers.Users
                 userId = result!.Id
             };
 
-            var accessToken = await tokensService.GenerateAccessToken(tokenRequest.userId,tokenRequest.refreshTokenString);
+            var accessToken = await _tokensService.GenerateAccessToken(tokenRequest.userId, tokenRequest.refreshTokenString);
 
             return new LoginResponse
             {

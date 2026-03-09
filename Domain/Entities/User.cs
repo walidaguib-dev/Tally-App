@@ -7,8 +7,8 @@ namespace Domain.Entities
 {
     public class User : IdentityUser
     {
-        public RefreshToken refreshToken { get; set; }
-        public UserProfile profile { get; set; }
+        public RefreshToken refreshToken { get; set; } = null!;
+        public UserProfile? profile { get; set; }
         public List<EmailToken> EmailTokens { get; set; } = new List<EmailToken>();
         public List<Uploads> Upload { get; set; } = [];
     }

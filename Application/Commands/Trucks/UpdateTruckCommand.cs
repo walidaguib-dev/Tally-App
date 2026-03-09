@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Application.Commands.Trucks
 {
-    public record UpdateTruckCommand(int Id, UpdatetTruckDto Dto) : IRequest<string?>, IInvalidateCache
+    public record UpdateTruckCommand(int Id, UpdateTruckDto Dto) : IRequest<string?>, IInvalidateCache
     {
         public List<string> CacheKeys => ["trucks", $"truck_{Id}"];
         public List<string> CacheTags => ["trucks"];

@@ -1,6 +1,8 @@
 ﻿using Application.Commands.Trucks;
 using Application.Dtos.Trucks;
 using Application.Queries.Trucks;
+using Domain.helpers;
+using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -18,16 +20,17 @@ namespace API.Controllers
 
         [HttpGet]
         [Authorize]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] TrucksQueryDto dto)
         {
-            var query = new GetAllTrucksQuery();
+            var query = new GetAllTrucksQuery(dto);
             var result = await mediator.Send(query, HttpContext.RequestAborted);
             return Ok(result);
         }
 
         [HttpGet("{id:int}")]
         [Authorize]
-        public async Task<IActionResult> GetOne([FromRoute] int id) {
+        public async Task<IActionResult> GetOne([FromRoute] int id)
+        {
             var query = new GetTruckQuery(id);
             var result = await mediator.Send(query, HttpContext.RequestAborted);
             return result is null ? NotFound() : Ok(result);
@@ -35,16 +38,28 @@ namespace API.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Chef")]
-        public async Task<IActionResult> CreateOne([FromBody] CreateTruckDto dto) {
-            var command = new CreateTruckCommand(dto);
-            var result = await mediator.Send(command, HttpContext.RequestAborted);
-            if (result is null) return BadRequest("something went wrong!");
-            return Created();
+        public async Task<IActionResult> CreateOne([FromBody] CreateTruckDto dto)
+        {
+            try
+            {
+                var command = new CreateTruckCommand(dto);
+                var result = await mediator.Send(command, HttpContext.RequestAborted);
+                if (result is null) return BadRequest("something went wrong!");
+                return Created();
+            }
+            catch (ValidationException e)
+            {
+                return BadRequest(new ValidationErrorResponse
+                {
+                    Errors = e.Errors.Select(e => e.ErrorMessage)
+                });
+            }
         }
 
         [HttpPatch("{id:int}")]
         [Authorize(Roles = "Chef")]
-        public async Task<IActionResult> UpdateOne([FromBody] UpdatetTruckDto dto , [FromRoute] int id) {
+        public async Task<IActionResult> UpdateOne([FromBody] UpdateTruckDto dto, [FromRoute] int id)
+        {
             var command = new UpdateTruckCommand(id, dto);
             var result = await mediator.Send(command, HttpContext.RequestAborted);
             return result is null ? NotFound() : Ok(result);
@@ -53,7 +68,8 @@ namespace API.Controllers
 
         [HttpDelete("{id:int}")]
         [Authorize(Roles = "Chef")]
-        public async Task<IActionResult> DeleteOne([FromRoute] int id) {
+        public async Task<IActionResult> DeleteOne([FromRoute] int id)
+        {
             var command = new DeleteTruckCommand(id);
             var result = await mediator.Send(command, HttpContext.RequestAborted);
             return result is null ? NotFound() : Ok(result);

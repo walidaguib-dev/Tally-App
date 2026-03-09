@@ -12,7 +12,7 @@ namespace Application.Dtos.Mail
         public DateTime ExpiresAt { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime? ConsumedAt { get; set; } = null;
-        public string Username { get; set; }
+        public string Username { get; set; } = string.Empty;
         public VerificationPurpose Purpose { get; set; } = VerificationPurpose.EmailVerification;
     }
 }

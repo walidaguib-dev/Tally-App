@@ -21,7 +21,6 @@ namespace Infrastructure.Repositories
         {
             await context.Clients.AddAsync(client);
             await context.SaveChangesAsync();
-            await cachingService.RemoveByTagAsync("clients");
             return client;
         }
 
@@ -31,8 +30,6 @@ namespace Infrastructure.Repositories
                 .Where(c => c.Id == id)
                 .ExecuteDeleteAsync();
             if (result == 0) return null;
-            await cachingService.RemoveCaching($"client_{id}");
-            await cachingService.RemoveByTagAsync("clients");
             return "client deleted!";
         }
 
@@ -108,8 +105,6 @@ namespace Infrastructure.Repositories
                 );
 
             if (affectedRows == 0) return null;
-            await cachingService.RemoveCaching($"client_{id}");
-            await cachingService.RemoveByTagAsync("clients");
             return "client updated";
         }
     }
