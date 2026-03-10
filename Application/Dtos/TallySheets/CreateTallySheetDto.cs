@@ -9,7 +9,6 @@ namespace Application.Dtos.TallySheets
 {
     public class CreateTallySheetDto
     {
-        public DateTime Date { get; set; }
         public int TeamsCount { get; set; }
         public ShiftType Shift { get; set; }
         public ZoneType Zone { get; set; }

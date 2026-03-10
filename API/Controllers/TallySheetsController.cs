@@ -29,9 +29,9 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> GetAll()
+        public async Task<ActionResult> GetAll([FromQuery] TallySheetsQueryDto queryDto)
         {
-            var result = await _mediator.Send(new Application.Queries.TallySheets.GetAllTallySheetsQuery());
+            var result = await _mediator.Send(new Application.Queries.TallySheets.GetAllTallySheetsQuery(queryDto));
             return Ok(result);
 
         }

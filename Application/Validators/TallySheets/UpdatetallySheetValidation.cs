@@ -12,9 +12,7 @@ namespace Application.Validators.TallySheets
     {
         public UpdatetallySheetValidation()
         {
-            RuleFor(x => x.dto.Date)
-                .NotEmpty().WithMessage("Date is required.")
-                .LessThanOrEqualTo(DateTime.UtcNow).WithMessage("Date cannot be in the future.");
+
 
             RuleFor(x => x.dto.TeamsCount)
                 .NotEmpty().WithMessage("Teams count is required.")

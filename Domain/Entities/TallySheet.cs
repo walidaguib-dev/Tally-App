@@ -8,7 +8,7 @@ namespace Domain.Entities
     public class TallySheet
     {
         public int Id { get; set; }
-        public DateTime Date { get; set; }
+        public DateOnly Date { get; set; }
         public int TeamsCount { get; set; }
         public ShiftType Shift { get; set; }
         public ZoneType Zone { get; set; }

@@ -12,6 +12,7 @@ namespace Application.Mappers
         {
             return new TallySheetDto
             {
+                Id = tallySheet.Id,
                 Date = tallySheet.Date,
                 Shift = tallySheet.Shift,
                 TeamsCount = tallySheet.TeamsCount,
@@ -28,7 +29,7 @@ namespace Application.Mappers
         {
             return new Domain.Entities.TallySheet
             {
-                Date = DateTime.SpecifyKind(tallySheetDto.Date, DateTimeKind.Utc),
+                Date = DateOnly.FromDateTime(DateTime.UtcNow),
                 Shift = tallySheetDto.Shift,
                 TeamsCount = tallySheetDto.TeamsCount,
                 ShipId = tallySheetDto.ShipId,

@@ -17,7 +17,7 @@ namespace Application.Handlers.TallySheets
         public async Task<bool?> Handle(UpdateTallySheetCommand request, CancellationToken cancellationToken)
         {
             var (id, dto) = request;
-            var result = await _tallySheetService.UpdateOneAsync(id, dto.Date, dto.TeamsCount, dto.Shift, dto.Zone, dto.ShipId);
+            var result = await _tallySheetService.UpdateOneAsync(id, dto.TeamsCount, dto.Shift, dto.Zone, dto.ShipId);
             return result;
         }
     }
