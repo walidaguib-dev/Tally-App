@@ -94,13 +94,14 @@ namespace Infrastructure.Repositories
                     };
                 },
                 TimeSpan.FromMinutes(10),
-                tags: ["tallysheets"]
+                tags: ["tallySheets"]
             );
+
         }
 
         public async Task<TallySheet?> GetOneAsync(int id)
         {
-            var key = $"tallysheet_{id}";
+            var key = $"tallySheet_{id}";
 
             return await caching.GetOrSetAsync(
                 key,

@@ -13,7 +13,11 @@ using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+    });
 builder.Services.AddOpenApi("v1", options => { options.AddDocumentTransformer<OpenApiTransformer>(); });
 builder.Services.AddLoggingConfiguration(builder.Configuration);
 builder.Services.AddApplication()
