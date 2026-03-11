@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Domain.Contracts;
 using Domain.Entities;
 using Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories
 {
@@ -20,14 +21,22 @@ namespace Infrastructure.Repositories
             return sheetTruck;
         }
 
-        public Task<bool?> EndTruckSessionTime(int id, TimeOnly EndTime)
+        public async Task<bool?> EndTruckSessionTime(int id, TimeOnly EndTime)
         {
-            throw new NotImplementedException();
+            var affectedRow = await context.TallySheetTrucks
+                        .Where(x => x.Id == id)
+                        .ExecuteUpdateAsync(s => s.SetProperty(p => p.EndTime, EndTime));
+            return affectedRow == 0 ? null : true;
         }
 
-        public Task<List<TallySheetTruck>> GetTallySheetTrucksAsync(int tallySessionId)
+        public async Task<List<TallySheetTruck>> GetTallySheetTrucksAsync(int tallySessionId)
         {
-            throw new NotImplementedException();
+            var result = await context.TallySheetTrucks
+                    .Include(r => r.TallySheet)
+                    .Include(r => r.Truck)
+                  .Where(x => x.TallySheetId == tallySessionId)
+                  .ToListAsync();
+            return result;
         }
     }
 }

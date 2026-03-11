@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Application.Dtos.TallySheetTrucks;
-using Domain.Entities;
 using MediatR;
 
-namespace Application.Commands.TallySheetTrucks
+namespace Application.Queries.TallySheetTrucks
 {
-    public record EndTruckTimeCommand(int Id, EndTruckTimeDto Dto) : IRequest<bool?>;
+    public record GetTallySheetTrucks(int TallySheetId) : IRequest<List<AssignedTruckDto>>;
 }

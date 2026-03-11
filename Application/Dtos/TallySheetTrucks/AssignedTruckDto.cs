@@ -7,6 +7,7 @@ namespace Application.Dtos.TallySheetTrucks
 {
     public class AssignedTruckDto
     {
+        public int Id { get; set; }
         public int TallySheetId { get; set; }
         public int TruckId { get; set; }
         public string TruckPlateNumber { get; set; } = string.Empty;
