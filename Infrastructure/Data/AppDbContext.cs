@@ -15,6 +15,7 @@ namespace Infrastructure.Data
         public DbSet<RefreshToken> refreshTokens { get; set; }
         public DbSet<EmailToken> emailTokens { get; set; }
         public DbSet<UserProfile> profiles { get; set; }
+        public DbSet<Pause> Pauses { get; set; }
         public DbSet<Uploads> uploads { get; set; }
         public DbSet<TallySheet> TallySheets { get; set; }
         public DbSet<Merchandise> Merchandises { get; set; }
@@ -51,9 +52,9 @@ namespace Infrastructure.Data
 
             builder.Entity<IdentityRole>().HasData(roles);
 
-            
 
-            
+
+
         }
     }
 }

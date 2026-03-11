@@ -10,7 +10,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class addedTimeTypeToPausesAndTallySheetTrucks : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -307,15 +307,22 @@ namespace Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Date = table.Column<DateOnly>(type: "date", nullable: false),
                     TeamsCount = table.Column<int>(type: "integer", nullable: false),
                     Shift = table.Column<string>(type: "text", nullable: false),
                     Zone = table.Column<string>(type: "text", nullable: false),
-                    ShipId = table.Column<int>(type: "integer", nullable: false)
+                    ShipId = table.Column<int>(type: "integer", nullable: false),
+                    UserId = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_TallySheets", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_TallySheets_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_TallySheets_Ships_ShipId",
                         column: x => x.ShipId,
@@ -389,8 +396,9 @@ namespace Infrastructure.Migrations
                 {
                     TallySheetId = table.Column<int>(type: "integer", nullable: false),
                     TruckId = table.Column<int>(type: "integer", nullable: false),
-                    StartTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    EndTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false),
+                    StartTime = table.Column<TimeOnly>(type: "time without time zone", nullable: false),
+                    EndTime = table.Column<TimeOnly>(type: "time without time zone", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -459,28 +467,33 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Pause",
+                name: "Pauses",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Reason = table.Column<string>(type: "text", nullable: false),
-                    StartTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    EndTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    StartTime = table.Column<TimeOnly>(type: "time without time zone", nullable: false),
+                    EndTime = table.Column<TimeOnly>(type: "time without time zone", nullable: true),
                     Notes = table.Column<string>(type: "text", nullable: true),
-                    TallySheetTruckId = table.Column<int>(type: "integer", nullable: false),
-                    TallySheetTruckTallySheetId = table.Column<int>(type: "integer", nullable: false),
-                    TallySheetTruckTruckId = table.Column<int>(type: "integer", nullable: false)
+                    TallySheetTruckId = table.Column<int>(type: "integer", nullable: true),
+                    TallySheetTruckTallySheetId = table.Column<int>(type: "integer", nullable: true),
+                    TallySheetTruckTruckId = table.Column<int>(type: "integer", nullable: true),
+                    TallySheetId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Pause", x => x.Id);
+                    table.PrimaryKey("PK_Pauses", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Pause_TallySheetTrucks_TallySheetTruckTallySheetId_TallyShe~",
+                        name: "FK_Pauses_TallySheetTrucks_TallySheetTruckTallySheetId_TallySh~",
                         columns: x => new { x.TallySheetTruckTallySheetId, x.TallySheetTruckTruckId },
                         principalTable: "TallySheetTrucks",
-                        principalColumns: new[] { "TallySheetId", "TruckId" },
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumns: new[] { "TallySheetId", "TruckId" });
+                    table.ForeignKey(
+                        name: "FK_Pauses_TallySheets_TallySheetId",
+                        column: x => x.TallySheetId,
+                        principalTable: "TallySheets",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.InsertData(
@@ -576,8 +589,13 @@ namespace Infrastructure.Migrations
                 column: "TruckId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Pause_TallySheetTruckTallySheetId_TallySheetTruckTruckId",
-                table: "Pause",
+                name: "IX_Pauses_TallySheetId",
+                table: "Pauses",
+                column: "TallySheetId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Pauses_TallySheetTruckTallySheetId_TallySheetTruckTruckId",
+                table: "Pauses",
                 columns: new[] { "TallySheetTruckTallySheetId", "TallySheetTruckTruckId" });
 
             migrationBuilder.CreateIndex(
@@ -619,6 +637,11 @@ namespace Infrastructure.Migrations
                 column: "ShipId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_TallySheets_UserId",
+                table: "TallySheets",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_TallySheetTrucks_TruckId",
                 table: "TallySheetTrucks",
                 column: "TruckId");
@@ -657,7 +680,7 @@ namespace Infrastructure.Migrations
                 name: "Observations");
 
             migrationBuilder.DropTable(
-                name: "Pause");
+                name: "Pauses");
 
             migrationBuilder.DropTable(
                 name: "profiles");

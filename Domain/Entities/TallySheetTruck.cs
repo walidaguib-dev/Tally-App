@@ -7,6 +7,7 @@ namespace Domain.Entities
 {
     public class TallySheetTruck
     {
+        public int Id { get; set; }
         public int TallySheetId { get; set; }
         public TallySheet TallySheet { get; set; } = null!;
 
@@ -14,8 +15,8 @@ namespace Domain.Entities
         public Truck Truck { get; set; } = null!;
 
         // Usage session
-        public DateTime StartTime { get; set; }
-        public DateTime EndTime { get; set; }
+        public TimeOnly StartTime { get; set; }
+        public TimeOnly? EndTime { get; set; }
 
         // Relationships
         public ICollection<Pause> Pauses { get; set; } = [];

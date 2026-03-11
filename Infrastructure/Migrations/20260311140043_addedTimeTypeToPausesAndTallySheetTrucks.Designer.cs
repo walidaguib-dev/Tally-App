@@ -13,8 +13,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260307115637_updatedTallySheetSchema")]
-    partial class updatedTallySheetSchema
+    [Migration("20260311140043_addedTimeTypeToPausesAndTallySheetTrucks")]
+    partial class addedTimeTypeToPausesAndTallySheetTrucks
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -190,8 +190,8 @@ namespace Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("EndTime")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<TimeOnly?>("EndTime")
+                        .HasColumnType("time without time zone");
 
                     b.Property<string>("Notes")
                         .HasColumnType("text");
@@ -200,23 +200,28 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("StartTime")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<TimeOnly>("StartTime")
+                        .HasColumnType("time without time zone");
 
-                    b.Property<int>("TallySheetTruckId")
+                    b.Property<int?>("TallySheetId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("TallySheetTruckTallySheetId")
+                    b.Property<int?>("TallySheetTruckId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("TallySheetTruckTruckId")
+                    b.Property<int?>("TallySheetTruckTallySheetId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("TallySheetTruckTruckId")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("TallySheetId");
+
                     b.HasIndex("TallySheetTruckTallySheetId", "TallySheetTruckTruckId");
 
-                    b.ToTable("Pause");
+                    b.ToTable("Pauses");
                 });
 
             modelBuilder.Entity("Domain.Entities.RefreshToken", b =>
@@ -286,8 +291,8 @@ namespace Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<DateOnly>("Date")
+                        .HasColumnType("date");
 
                     b.Property<string>("Shift")
                         .IsRequired()
@@ -353,11 +358,14 @@ namespace Infrastructure.Migrations
                     b.Property<int>("TruckId")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime>("EndTime")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<TimeOnly?>("EndTime")
+                        .HasColumnType("time without time zone");
 
-                    b.Property<DateTime>("StartTime")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<int>("Id")
+                        .HasColumnType("integer");
+
+                    b.Property<TimeOnly>("StartTime")
+                        .HasColumnType("time without time zone");
 
                     b.HasKey("TallySheetId", "TruckId");
 
@@ -735,11 +743,15 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.Pause", b =>
                 {
+                    b.HasOne("Domain.Entities.TallySheet", "TallySheet")
+                        .WithMany()
+                        .HasForeignKey("TallySheetId");
+
                     b.HasOne("Domain.Entities.TallySheetTruck", "TallySheetTruck")
                         .WithMany("Pauses")
-                        .HasForeignKey("TallySheetTruckTallySheetId", "TallySheetTruckTruckId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("TallySheetTruckTallySheetId", "TallySheetTruckTruckId");
+
+                    b.Navigation("TallySheet");
 
                     b.Navigation("TallySheetTruck");
                 });
@@ -945,8 +957,7 @@ namespace Infrastructure.Migrations
 
                     b.Navigation("Upload");
 
-                    b.Navigation("profile")
-                        .IsRequired();
+                    b.Navigation("profile");
 
                     b.Navigation("refreshToken")
                         .IsRequired();
