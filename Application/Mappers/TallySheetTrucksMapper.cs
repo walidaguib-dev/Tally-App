@@ -13,11 +13,10 @@ namespace Application.Mappers
         {
             return new AssignedTruckDto
             {
-                Id = sheetTruck.Id,
                 TallySheetId = sheetTruck.TallySheetId,
                 TruckId = sheetTruck.TruckId,
-                TruckPlateNumber = sheetTruck.Truck?.PlateNumber ?? "Unknown",
-                StartTime = TimeOnly.FromDateTime(DateTime.UtcNow),
+                TruckPlateNumber = sheetTruck.Truck.PlateNumber,
+                StartTime = sheetTruck.StartTime,
                 EndTime = sheetTruck.EndTime
             };
         }

@@ -8,15 +8,14 @@ using MediatR;
 
 namespace Application.Handlers.TallySheetTrucks
 {
-    public class EndTruckTimeHandler(
+    public class DeleteAssignedTruckHandler(
         ITallySheetTruck _tallySheetTruckService
-    ) : IRequestHandler<EndTruckTimeCommand, bool?>
+    ) : IRequestHandler<DeleteAssignedTruckCommand, bool?>
     {
         private readonly ITallySheetTruck tallySheetTruckService = _tallySheetTruckService;
-        public async Task<bool?> Handle(EndTruckTimeCommand request, CancellationToken cancellationToken)
+        public async Task<bool?> Handle(DeleteAssignedTruckCommand request, CancellationToken cancellationToken)
         {
-            var (TallySheetId, TruckId, Dto) = request;
-            return await tallySheetTruckService.EndTruckSessionTime(TallySheetId, TruckId, Dto.EndTime);
+            return await tallySheetTruckService.DeleteAssignedTruck(request.TallySheetId, request.TruckId);
         }
     }
 }

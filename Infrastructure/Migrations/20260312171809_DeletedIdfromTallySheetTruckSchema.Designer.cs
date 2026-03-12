@@ -13,8 +13,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260311150617_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20260312171809_DeletedIdfromTallySheetTruckSchema")]
+    partial class DeletedIdfromTallySheetTruckSchema
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -360,9 +360,6 @@ namespace Infrastructure.Migrations
 
                     b.Property<TimeOnly?>("EndTime")
                         .HasColumnType("time without time zone");
-
-                    b.Property<int>("Id")
-                        .HasColumnType("integer");
 
                     b.Property<TimeOnly>("StartTime")
                         .HasColumnType("time without time zone");

@@ -6,12 +6,14 @@ using Application.Commands.TallySheetTrucks;
 using Application.Dtos.TallySheetTrucks;
 using Application.Queries.TallySheetTrucks;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class TallySheetTrucksController(
         IMediator _mediator
     ) : ControllerBase
@@ -31,16 +33,24 @@ namespace API.Controllers
         public async Task<IActionResult> AssignTruck([FromBody] AssignTruckDto dto)
         {
             var command = new AssignTruckCommand(dto);
-            var result = await mediator.Send(command);
+            var result = await mediator.Send(command, HttpContext.RequestAborted);
             return Created();
         }
 
-        [HttpPatch("{id:int}")]
-        public async Task<IActionResult> EndTruckTime([FromRoute] int id, [FromBody] EndTruckTimeDto dto)
+        [HttpPatch("EndTime/{TallySheetId:int}/{TruckId:int}")]
+        public async Task<IActionResult> EndTruckTime([FromRoute] int TallySheetId, [FromRoute] int TruckId, [FromBody] EndTruckTimeDto dto)
         {
-            var command = new EndTruckTimeCommand(id, dto);
-            var result = await mediator.Send(command);
+            var command = new EndTruckTimeCommand(TallySheetId, TruckId, dto);
+            var result = await mediator.Send(command, HttpContext.RequestAborted);
             if (result == null) return NotFound();
+            return Ok(result);
+        }
+
+        [HttpDelete("Delete/{TallySheetId:int}/{TruckId:int}")]
+        public async Task<IActionResult> DeleteAssignedTruck(int TallySheetId, [FromRoute] int TruckId)
+        {
+            var command = new DeleteAssignedTruckCommand(TallySheetId, TruckId);
+            var result = await mediator.Send(command, HttpContext.RequestAborted);
             return Ok(result);
         }
     }

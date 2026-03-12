@@ -7,12 +7,12 @@ namespace Domain.Entities
 {
     public class TallySheetTruck
     {
-        public int Id { get; set; }
+
         public int TallySheetId { get; set; }
-        public TallySheet TallySheet { get; set; } = null!;
+        public TallySheet TallySheet { get; set; }
 
         public int TruckId { get; set; }
-        public Truck Truck { get; set; } = null!;
+        public Truck Truck { get; set; }
 
         // Usage session
         public TimeOnly StartTime { get; set; }

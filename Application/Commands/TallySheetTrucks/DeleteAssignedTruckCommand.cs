@@ -2,14 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Application.Dtos.TallySheetTrucks;
-using Domain.Entities;
 using Domain.Helpers;
 using MediatR;
 
 namespace Application.Commands.TallySheetTrucks
 {
-    public record EndTruckTimeCommand(int TallySheetId, int TruckId, EndTruckTimeDto Dto) : IRequest<bool?>, IInvalidateCache
+    public record DeleteAssignedTruckCommand(int TallySheetId, int TruckId) : IRequest<bool?>, IInvalidateCache
     {
         public List<string> CacheKeys => [$"TallySheetTrucks_{TallySheetId}"];
 

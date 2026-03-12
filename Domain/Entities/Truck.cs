@@ -11,9 +11,10 @@ namespace Domain.Entities
         public double Capacity { get; set; }
 
         // Relationships
+
         public ICollection<TallySheetTruck> TallySheetTrucks { get; set; } = [];
         public ICollection<Observation> Observations { get; set; } = [];
 
-        
+
     }
 }

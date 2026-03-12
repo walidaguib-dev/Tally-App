@@ -20,6 +20,7 @@ namespace Domain.Entities
         public User User { get; set; } = null!;
 
         public ICollection<TallySheetMerchandise> TallySheetMerchandises { get; set; } = [];
+
         public ICollection<TallySheetTruck> TallySheetTrucks { get; set; } = [];
         public ICollection<Observation> Observations { get; set; } = [];
 

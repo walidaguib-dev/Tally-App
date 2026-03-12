@@ -21,7 +21,7 @@ namespace Application.Mappers
                 UserId = tallySheet.UserId,
                 Observations = tallySheet.Observations ?? [],
                 TallySheetMerchandises = tallySheet.TallySheetMerchandises ?? [],
-                TallySheetTrucks = tallySheet.TallySheetTrucks ?? []
+
             };
         }
 
