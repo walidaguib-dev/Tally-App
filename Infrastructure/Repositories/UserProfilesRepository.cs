@@ -28,10 +28,11 @@ namespace Infrastructure.Repositories
         {
             var key = $"profile_{userId}";
             var cachedProfile = await _cachingService.GetOrSetAsync(
-                key, 
+                key,
                 async token => await _context.profiles
                 .Include(p => p.Upload)
                 .Include(p => p.User)
+                .AsNoTracking()
                 .FirstOrDefaultAsync(p => p.UserId == userId, cancellationToken: token)
                 , TimeSpan.FromHours(1));
             if (cachedProfile is null) return null;

@@ -44,7 +44,7 @@ namespace Infrastructure.Repositories
             var result = await cache.GetOrSetAsync(key,
                 async token =>
                 {
-                    var query = _context.Merchandises.AsQueryable();
+                    var query = _context.Merchandises.AsNoTracking().AsQueryable();
 
                     if (!string.IsNullOrEmpty(name))
                         query = query.Where(c => c.Name.Contains(name));
@@ -99,7 +99,7 @@ namespace Infrastructure.Repositories
         {
             var key = $"merchandise_{id}";
             var cachedMerchandise = await cache.GetOrSetAsync(key,
-                async token => await _context.Merchandises.FirstOrDefaultAsync(m => m.Id == id, cancellationToken: token),
+                async token => await _context.Merchandises.AsNoTracking().FirstOrDefaultAsync(m => m.Id == id, cancellationToken: token),
                 TimeSpan.FromHours(1));
 
             return cachedMerchandise ?? null;

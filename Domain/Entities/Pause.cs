@@ -14,11 +14,11 @@ namespace Domain.Entities
         public string? Notes { get; set; } = string.Empty;
 
         // Relationships
-        public int? TallySheetTruckId { get; set; }
-        public TallySheetTruck? TallySheetTruck { get; set; } = null!;
+        public int? TruckId { get; set; }
+        public Truck? Truck { get; set; } = null!;
 
-        public int? TallySheetId { get; set; }
-        public TallySheet? TallySheet { get; set; }
+        public int TallySheetId { get; set; }
+        public TallySheet TallySheet { get; set; } = null!;
 
 
     }

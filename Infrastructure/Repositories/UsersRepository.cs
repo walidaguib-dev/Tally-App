@@ -23,25 +23,25 @@ namespace Infrastructure.Repositories
     {
         private readonly UserManager<User> _userManager = userManager;
         private readonly SignInManager<User> _signInManager = signInManager;
-        public async Task<User> CreateUser(User user , string password , string role)
+        public async Task<User> CreateUser(User user, string password, string role)
         {
             var userExists = await _userManager.FindByNameAsync(user.UserName!);
 
-            if(userExists != null)
+            if (userExists != null)
                 throw new InvalidOperationException("User already exists!");
 
-            var result = await _userManager.CreateAsync(user , password);
-            
-                var roleResult = await _userManager.AddToRoleAsync(user, role);
+            var result = await _userManager.CreateAsync(user, password);
 
-                if (!roleResult.Succeeded)
-                {
-                    throw new Exception(string.Join(", ",
-                        roleResult.Errors.Select(e => e.Description)));
-                }
+            var roleResult = await _userManager.AddToRoleAsync(user, role);
+
+            if (!roleResult.Succeeded)
+            {
+                throw new Exception(string.Join(", ",
+                    roleResult.Errors.Select(e => e.Description)));
+            }
 
 
-            
+
             return user;
         }
 
@@ -49,9 +49,9 @@ namespace Infrastructure.Repositories
         {
             var user = await _userManager.FindByIdAsync(userId);
             if (user == null)
-                    throw new InvalidOperationException("User not found!");
+                throw new InvalidOperationException("User not found!");
 
-            var result = await _userManager.ResetPasswordAsync(user,token, new_password);
+            var result = await _userManager.ResetPasswordAsync(user, token, new_password);
             if (!result.Succeeded)
             {
                 throw new Exception(string.Join(", ",
@@ -62,10 +62,10 @@ namespace Infrastructure.Repositories
 
         public async Task<List<User>> GetAllUsers()
         {
-            return await _userManager.Users.ToListAsync();
+            return await _userManager.Users.AsNoTracking().ToListAsync();
         }
 
-        public async Task<User?> ResetPassword(string userId, string current_password , string new_password)
+        public async Task<User?> ResetPassword(string userId, string current_password, string new_password)
         {
             var user = await _userManager.FindByIdAsync(userId.ToString());
             if (user == null)

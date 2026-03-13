@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Domain.Contracts;
 using Domain.Entities;
+using Domain.Enums;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -39,12 +40,32 @@ namespace Infrastructure.Repositories
 
         public async Task<Pause?> GetById(int Id)
         {
-            return await context.Pauses.FirstOrDefaultAsync(x => x.Id == Id);
+            return await context.Pauses
+                .AsNoTracking()
+                .Include(x => x.Truck)
+                .Include(x => x.TallySheet)
+                .FirstOrDefaultAsync(x => x.Id == Id);
         }
 
         public Task<List<Pause>> GetPausesByTallySession(int tallySessionId)
         {
-            return context.Pauses.Where(x => x.TallySheetId == tallySessionId).ToListAsync();
+            return context.Pauses
+            .AsNoTracking()
+            .Include(x => x.Truck)
+            .Include(x => x.TallySheet)
+            .Where(x => x.TallySheetId == tallySessionId).ToListAsync();
+        }
+
+        public async Task<bool?> UpdatePause(int id, UpdatePauseObject updatePauseObject)
+        {
+            var affectedRow = await context.Pauses
+                        .Where(x => x.Id == id)
+                        .ExecuteUpdateAsync(x => x.SetProperty(p => p.Reason, Enum.TryParse<PauseReason>(updatePauseObject.Reason, true, out var reason) ? reason : PauseReason.Other)
+                                                .SetProperty(p => p.StartTime, updatePauseObject.StartTime)
+                                                .SetProperty(p => p.Notes, updatePauseObject.Notes)
+                                                .SetProperty(p => p.TruckId, updatePauseObject.TruckId)
+                                                );
+            return affectedRow == 0 ? null : true;
         }
     }
 }

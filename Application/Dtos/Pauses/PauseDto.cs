@@ -13,5 +13,6 @@ namespace Application.Dtos.Pauses
         public TimeOnly? EndTime { get; set; }
         public double? DurationMinutes { get; set; } // computed
         public string? Notes { get; set; }
+        public string? TruckName { get; set; }
     }
 }

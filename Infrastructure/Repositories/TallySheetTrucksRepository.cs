@@ -48,6 +48,7 @@ namespace Infrastructure.Repositories
                 {
                     var result = await context.TallySheetTrucks
                     .Include(r => r.Truck)
+                    .AsNoTracking()
                   .Where(x => x.TallySheetId == TallySheetId)
                   .ToListAsync(cancellationToken: token);
                     return result;

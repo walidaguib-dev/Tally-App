@@ -39,6 +39,7 @@ namespace Infrastructure.Repositories
             var result = await cachingService.GetOrSetAsync(
                 key,
                 async token => await context.Clients
+                .AsNoTracking()
                 .Include(c => c.Merchandise)
                 .FirstOrDefaultAsync(c => c.Id == id, cancellationToken: token),
                 TimeSpan.FromHours(1));
@@ -54,6 +55,7 @@ namespace Infrastructure.Repositories
                 async token =>
                 {
                     var query = context.Clients
+                        .AsNoTracking()
                         .Include(c => c.Merchandise)
                         .AsQueryable();
 

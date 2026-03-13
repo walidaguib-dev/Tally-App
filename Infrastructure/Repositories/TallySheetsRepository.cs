@@ -49,6 +49,7 @@ namespace Infrastructure.Repositories
                 async token =>
                 {
                     var query = context.TallySheets
+                    .AsNoTracking()
                         .Include(x => x.Ship)
                         .AsQueryable();
 
@@ -108,6 +109,7 @@ namespace Infrastructure.Repositories
                 async token =>
                 {
                     var tallySheet = await context.TallySheets
+                        .AsNoTracking()
                         .Include(x => x.Ship)
                         .FirstOrDefaultAsync(x => x.Id == id, token);
                     return tallySheet;

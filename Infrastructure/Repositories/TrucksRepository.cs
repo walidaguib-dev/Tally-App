@@ -40,7 +40,7 @@ namespace Infrastructure.Repositories
                 key,
                 async token =>
                 {
-                    var query = context.Trucks.AsQueryable();
+                    var query = context.Trucks.AsNoTracking().AsQueryable();
 
                     if (!string.IsNullOrEmpty(plateNumber) || !string.IsNullOrWhiteSpace(plateNumber))
                         query = query.Where(q => q.PlateNumber == plateNumber);
@@ -79,7 +79,7 @@ namespace Infrastructure.Repositories
             var key = $"truck_{Id}";
             var cachedTruck = await cachingService.GetOrSetAsync(
                 key,
-                async token => await context.Trucks.Where(x => x.Id == Id).FirstAsync(),
+                async token => await context.Trucks.AsNoTracking().Where(x => x.Id == Id).FirstAsync(token),
                 TimeSpan.FromHours(1)
                 );
             return cachedTruck is null ? null : cachedTruck;

@@ -13,6 +13,7 @@ namespace Domain.Entities
         // Relationships
 
         public ICollection<TallySheetTruck> TallySheetTrucks { get; set; } = [];
+        public List<Pause> Pauses { get; set; } = [];
         public ICollection<Observation> Observations { get; set; } = [];
 
 

@@ -41,7 +41,7 @@ namespace Infrastructure.Repositories
                 key,
                 async token =>
                 {
-                    var query = _context.Ships.AsQueryable();
+                    var query = _context.Ships.AsNoTracking().AsQueryable();
                     if (!string.IsNullOrEmpty(name))
                         query = query.Where(c => c.Name.Contains(name));
 
@@ -81,7 +81,7 @@ namespace Infrastructure.Repositories
             var key = $"ship_{id}";
 
             var cachedShip = await _cachingService.GetOrSetAsync(key,
-                async token => await _context.Ships.FirstOrDefaultAsync(s => s.Id == id, cancellationToken: token),
+                async token => await _context.Ships.AsNoTracking().FirstOrDefaultAsync(s => s.Id == id, cancellationToken: token),
                 TimeSpan.FromMinutes(10));
             if (cachedShip is null) return null;
             return cachedShip;

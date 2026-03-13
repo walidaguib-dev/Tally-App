@@ -20,7 +20,8 @@ namespace Application.Mappers
                 StartTime = pause.StartTime,
                 EndTime = pause.EndTime ?? null, // If EndTime is null, use current time for duration calculation
                 DurationMinutes = pause.EndTime > pause.StartTime ? duration : null,
-                Notes = pause.Notes
+                Notes = pause.Notes,
+                TruckName = pause.Truck?.PlateNumber
             };
         }
 
@@ -33,7 +34,7 @@ namespace Application.Mappers
                 Notes = createPauseDto.Notes,
                 EndTime = null,
                 TallySheetId = createPauseDto.TallySheetId,
-                TallySheetTruckId = createPauseDto.TallySheetTruckId // temporarily set to now, should be updated when the pause ends
+                TruckId = createPauseDto.TruckId // temporarily set to now, should be updated when the pause ends
             };
         }
     }

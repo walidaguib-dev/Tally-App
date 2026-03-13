@@ -7,5 +7,5 @@ using MediatR;
 
 namespace Application.Queries.Pauses
 {
-    public record GetAllPausesQuery : IRequest<List<PauseDto>>;
+    public record GetAllPausesQuery(int tallySheetId) : IRequest<List<PauseDto>>;
 }

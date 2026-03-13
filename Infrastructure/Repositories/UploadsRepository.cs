@@ -21,14 +21,14 @@ namespace Infrastructure.Repositories
 
         public async Task<object> DeleteUploadAsync(string publicId)
         {
-            var file =await _context.uploads.FirstOrDefaultAsync(u => u.PublicId == publicId) ?? throw new Exception("file not found!");
+            var file = await _context.uploads.FirstOrDefaultAsync(u => u.PublicId == publicId) ?? throw new Exception("file not found!");
             var deletionParams = new DeletionParams(file.PublicId);
             var result = await _cloudinaryService.DestroyAsync(deletionParams);
-            if(result.Error != null || result.StatusCode != System.Net.HttpStatusCode.OK)
+            if (result.Error != null || result.StatusCode != System.Net.HttpStatusCode.OK)
             {
                 throw new Exception(result.Error!.Message);
             }
-             _context.uploads.Remove(file);
+            _context.uploads.Remove(file);
             await _context.SaveChangesAsync();
             return result;
 
@@ -38,6 +38,7 @@ namespace Infrastructure.Repositories
         {
             var uploads = await _context.uploads
                 .Include(u => u.User)
+                .AsNoTracking()
                 .Where(u => u.UserId == userId).ToListAsync();
             return uploads;
         }
@@ -46,8 +47,9 @@ namespace Infrastructure.Repositories
         {
             var upload = await _context.uploads
                 .Include(u => u.User)
+                .AsNoTracking()
                 .FirstOrDefaultAsync(u => u.UserId == userId);
-            if(upload == null)
+            if (upload == null)
             {
                 throw new Exception("Upload not found");
             }
@@ -93,7 +95,7 @@ namespace Infrastructure.Repositories
             };
 
             var result = await _cloudinaryService.UploadAsync(uploadParams);
-            if(result.Error != null || result.StatusCode != System.Net.HttpStatusCode.OK)
+            if (result.Error != null || result.StatusCode != System.Net.HttpStatusCode.OK)
             {
                 throw new Exception(result.Error!.Message);
             }
@@ -104,7 +106,7 @@ namespace Infrastructure.Repositories
         {
             var uploadResult = await UploadImageAsync(file) as ImageUploadResult;
 
-            if(uploadResult == null || uploadResult.Error != null)
+            if (uploadResult == null || uploadResult.Error != null)
             {
                 throw new Exception("Image upload failed");
             }

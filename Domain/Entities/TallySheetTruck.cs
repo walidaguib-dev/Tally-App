@@ -9,10 +9,10 @@ namespace Domain.Entities
     {
 
         public int TallySheetId { get; set; }
-        public TallySheet TallySheet { get; set; }
+        public TallySheet TallySheet { get; set; } = null!;
 
         public int TruckId { get; set; }
-        public Truck Truck { get; set; }
+        public Truck Truck { get; set; } = null!;
 
         // Usage session
         public TimeOnly StartTime { get; set; }

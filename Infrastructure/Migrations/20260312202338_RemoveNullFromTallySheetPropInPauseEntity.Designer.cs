@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -12,9 +13,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260312202338_RemoveNullFromTallySheetPropInPauseEntity")]
+    partial class RemoveNullFromTallySheetPropInPauseEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -203,20 +206,18 @@ namespace Infrastructure.Migrations
                     b.Property<int>("TallySheetId")
                         .HasColumnType("integer");
 
+                    b.Property<int?>("TallySheetTruckId")
+                        .HasColumnType("integer");
+
                     b.Property<int?>("TallySheetTruckTallySheetId")
                         .HasColumnType("integer");
 
                     b.Property<int?>("TallySheetTruckTruckId")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("TruckId")
-                        .HasColumnType("integer");
-
                     b.HasKey("Id");
 
                     b.HasIndex("TallySheetId");
-
-                    b.HasIndex("TruckId");
 
                     b.HasIndex("TallySheetTruckTallySheetId", "TallySheetTruckTruckId");
 
@@ -745,17 +746,13 @@ namespace Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Entities.Truck", "Truck")
-                        .WithMany("Pauses")
-                        .HasForeignKey("TruckId");
-
-                    b.HasOne("Domain.Entities.TallySheetTruck", null)
+                    b.HasOne("Domain.Entities.TallySheetTruck", "TallySheetTruck")
                         .WithMany("Pauses")
                         .HasForeignKey("TallySheetTruckTallySheetId", "TallySheetTruckTruckId");
 
                     b.Navigation("TallySheet");
 
-                    b.Navigation("Truck");
+                    b.Navigation("TallySheetTruck");
                 });
 
             modelBuilder.Entity("Domain.Entities.RefreshToken", b =>
@@ -944,8 +941,6 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entities.Truck", b =>
                 {
                     b.Navigation("Observations");
-
-                    b.Navigation("Pauses");
 
                     b.Navigation("TallySheetTrucks");
                 });
