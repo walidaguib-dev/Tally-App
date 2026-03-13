@@ -11,10 +11,12 @@ using Microsoft.EntityFrameworkCore;
 namespace Infrastructure.Repositories
 {
     public class PausesRepository(
-        ApplicationDbContext _context
+        ApplicationDbContext _context,
+        ICaching cachingService
     ) : IPauses
     {
         private readonly ApplicationDbContext context = _context;
+        private readonly ICaching _cachingService = cachingService;
         public async Task<Pause> CreatePause(Pause pause)
         {
             await context.Pauses.AddAsync(pause);
@@ -40,20 +42,41 @@ namespace Infrastructure.Repositories
 
         public async Task<Pause?> GetById(int Id)
         {
-            return await context.Pauses
-                .AsNoTracking()
-                .Include(x => x.Truck)
-                .Include(x => x.TallySheet)
-                .FirstOrDefaultAsync(x => x.Id == Id);
+            var key = $"pause_{Id}";
+            var result = await _cachingService.GetOrSetAsync(
+                key,
+                async token =>
+                {
+                    return await context.Pauses
+                    .AsNoTracking()
+                    .Include(x => x.Truck)
+                    .Include(x => x.TallySheet)
+                    .FirstOrDefaultAsync(x => x.Id == Id, cancellationToken: token);
+                },
+                TimeSpan.FromMinutes(15),
+                ["pause"]
+            );
+            return result;
         }
 
-        public Task<List<Pause>> GetPausesByTallySession(int tallySessionId)
+        public async Task<List<Pause>> GetPausesByTallySession(int tallySessionId)
         {
-            return context.Pauses
-            .AsNoTracking()
-            .Include(x => x.Truck)
-            .Include(x => x.TallySheet)
-            .Where(x => x.TallySheetId == tallySessionId).ToListAsync();
+            var key = $"pauses_{tallySessionId}";
+            var result = await _cachingService.GetOrSetAsync(
+                key,
+                async token =>
+                {
+                    return await context.Pauses
+                    .AsNoTracking()
+                    .Include(x => x.Truck)
+                    .Include(x => x.TallySheet)
+                    .Where(x => x.TallySheetId == tallySessionId).ToListAsync();
+                },
+                TimeSpan.FromMinutes(10),
+                ["pauses"]
+            );
+
+            return result ?? [];
         }
 
         public async Task<bool?> UpdatePause(int id, UpdatePauseObject updatePauseObject)
