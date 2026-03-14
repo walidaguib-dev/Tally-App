@@ -18,7 +18,7 @@ namespace Application.Dtos.TallySheets
         public int ShipId { get; set; }
         public string UserId { get; set; } = null!;
 
-        public ICollection<TallySheetMerchandise> TallySheetMerchandises { get; set; } = [];
+        public ICollection<Domain.Entities.TallySheetMerchandise> TallySheetMerchandises { get; set; } = [];
         public ICollection<TallySheetTruck> TallySheetTrucks { get; set; } = [];
         public ICollection<Observation> Observations { get; set; } = [];
     }
