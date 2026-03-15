@@ -34,20 +34,54 @@ namespace Infrastructure.Repositories
             return result == 0 ? null : true;
         }
 
-        public Task<TallySheetMerchandise?> GetById(int tallySheetId, int MerchandiseId)
+        public async Task<TallySheetMerchandise?> GetById(int tallySheetId, int MerchandiseId)
         {
-            throw new NotImplementedException();
+            var key = $"Operation_{tallySheetId}_{MerchandiseId}";
+            var result = await cachingService.GetOrSetAsync(
+                key,
+                async token =>
+                {
+                    return await context.TallySheetMerchandises
+                        .AsNoTracking()
+                        .Include(p => p.Merchandise)
+                        .FirstOrDefaultAsync(x => x.MerchandiseId == MerchandiseId && x.TallySheetId == tallySheetId, token);
+                },
+                TimeSpan.FromMinutes(10)
+            );
+
+            return result;
         }
 
-        public Task<List<TallySheetMerchandise>> GetByTallySheet(int tallySheetId)
+        public async Task<List<TallySheetMerchandise>> GetByTallySheet(int tallySheetId)
         {
-            throw new NotImplementedException();
+            var key = $"Operations_{tallySheetId}";
+            var result = await cachingService.GetOrSetAsync(
+                key,
+                async token =>
+                {
+                    return await context.TallySheetMerchandises
+                    .AsNoTracking()
+                    .Include(p => p.Merchandise)
+                                .Where(x => x.TallySheetId == tallySheetId)
+                                .ToListAsync(token);
+                },
+                TimeSpan.FromMinutes(10)
+            );
+
+            return result ?? [];
         }
 
 
-        public Task QueueQuantityUpdate(int tallySheetId, int MerchandiseId, int quantity)
+        public async Task<bool?> QueueQuantityUpdate(int tallySheetId, int MerchandiseId, int quantity)
         {
-            throw new NotImplementedException();
+            var exists = await context.TallySheetMerchandises
+                .AsNoTracking()
+                .AnyAsync(x => x.TallySheetId == tallySheetId && x.MerchandiseId == MerchandiseId);
+            if (!exists) return false;
+            var db = connection.GetDatabase();
+            var key = $"quantity_pending_{tallySheetId}_{MerchandiseId}";
+            await db.StringSetAsync(key, quantity, TimeSpan.FromMinutes(30));
+            return true;
         }
     }
 }

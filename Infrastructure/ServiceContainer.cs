@@ -1,4 +1,6 @@
 ﻿using Domain.Contracts;
+using Hangfire;
+using Infrastructure.Jobs;
 using Infrastructure.Repositories;
 using Infrastructure.Services;
 using Microsoft.AspNetCore.Builder;
@@ -11,9 +13,9 @@ namespace Infrastructure
 {
     public static class ServicesContainer
     {
-        public static IServiceCollection AddInfrastructure(this IServiceCollection services , WebApplicationBuilder builder)
+        public static IServiceCollection AddInfrastructure(this IServiceCollection services, WebApplicationBuilder builder)
         {
-            
+
             return services;
         }
     }

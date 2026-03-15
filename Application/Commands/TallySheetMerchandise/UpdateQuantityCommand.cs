@@ -8,9 +8,9 @@ using MediatR;
 
 namespace Application.Commands.TallySheetMerchandise
 {
-    public record UpdateQuantityCommand(int Id, UpdateQuantityDto Dto) : IRequest<bool?>, IInvalidateCache
+    public record UpdateQuantityCommand(int TallySheetId, int MerchandiseId, UpdateQuantityDto Dto) : IRequest<bool?>, IInvalidateCache
     {
-        public List<string> CacheKeys => throw new NotImplementedException();
+        public List<string> CacheKeys => [$"Operation_{TallySheetId}_{MerchandiseId}", $"Operations_{TallySheetId}"];
 
         public List<string> CacheTags => throw new NotImplementedException();
     }

@@ -14,6 +14,6 @@ namespace Domain.Contracts
         Task<bool?> DeleteMerchandise(int tallySheetId, int MerchandiseId);
 
         // Write-behind quantity update — Redis only, no DB
-        Task QueueQuantityUpdate(int tallySheetId, int MerchandiseId, int quantity);
+        public Task<bool?> QueueQuantityUpdate(int tallySheetId, int MerchandiseId, int quantity);
     }
 }

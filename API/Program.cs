@@ -5,6 +5,7 @@ using FluentValidation;
 using Hangfire;
 using Infrastructure;
 using Infrastructure.Data;
+using Infrastructure.Jobs;
 using Infrastructure.Services;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
@@ -39,6 +40,12 @@ builder.Services.AddSignalR();
 
 builder.Host.UseSerilog();
 var app = builder.Build();
+
+RecurringJob.AddOrUpdate<QuantitySyncJob>(
+    "sync-pending-quantities",
+    job => job.SyncQuantities(),
+    "*/2 * * * *"
+);
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

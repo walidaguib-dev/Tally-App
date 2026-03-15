@@ -7,9 +7,9 @@ using MediatR;
 
 namespace Application.Commands.TallySheetMerchandise
 {
-    public record DeleteTallySheetMerchandise(int Id) : IRequest<bool?>, IInvalidateCache
+    public record DeleteTallySheetMerchandise(int TallySheetId, int MerchandiseId) : IRequest<bool?>, IInvalidateCache
     {
-        public List<string> CacheKeys => throw new NotImplementedException();
+        public List<string> CacheKeys => [$"Operation_{TallySheetId}_{MerchandiseId}", $"Operations_{TallySheetId}"];
 
         public List<string> CacheTags => throw new NotImplementedException();
     }
