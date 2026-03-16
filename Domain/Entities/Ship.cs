@@ -12,7 +12,6 @@ namespace Domain.Entities
         public string ImoNumber { get; set; } = string.Empty;
 
         // Relationships
-        [JsonIgnore]
         public List<TallySheet> tallySheets { get; set; } = [];
     }
 }

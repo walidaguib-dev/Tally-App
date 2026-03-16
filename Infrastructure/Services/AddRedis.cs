@@ -16,6 +16,9 @@ namespace Infrastructure.Services
                 options.Configuration = configuration.GetValue<string>("RedisConnectionString");
                 options.InstanceName = "MyAppCache_";
             });
+            services.AddSingleton<IConnectionMultiplexer>(
+                ConnectionMultiplexer.Connect(configuration["RedisConnectionString"]!));
+
 
             return services;
         }

@@ -17,7 +17,7 @@ namespace Application.Mappers
                 TruckId = sheetTruck.TruckId,
                 TruckPlateNumber = sheetTruck.Truck.PlateNumber,
                 StartTime = sheetTruck.StartTime,
-                EndTime = sheetTruck.EndTime
+                EndTime = sheetTruck.EndTime,
             };
         }
 
@@ -28,7 +28,7 @@ namespace Application.Mappers
                 TallySheetId = dto.TallySheetId,
                 TruckId = dto.TruckId,
                 StartTime = dto.StartTime,
-                EndTime = null
+                EndTime = null,
             };
         }
     }

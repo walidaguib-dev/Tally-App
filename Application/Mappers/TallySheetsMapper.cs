@@ -20,12 +20,14 @@ namespace Application.Mappers
                 Zone = tallySheet.Zone,
                 UserId = tallySheet.UserId,
                 Observations = tallySheet.Observations ?? [],
-                TallySheetMerchandises = tallySheet.TallySheetMerchandises ?? [],
-
+                TallySheetClients = tallySheet.TallySheetClients ?? [],
             };
         }
 
-        public static Domain.Entities.TallySheet MapToEntity(this CreateTallySheetDto tallySheetDto, string userId)
+        public static Domain.Entities.TallySheet MapToEntity(
+            this CreateTallySheetDto tallySheetDto,
+            string userId
+        )
         {
             return new Domain.Entities.TallySheet
             {
@@ -34,8 +36,9 @@ namespace Application.Mappers
                 TeamsCount = tallySheetDto.TeamsCount,
                 ShipId = tallySheetDto.ShipId,
                 Zone = tallySheetDto.Zone,
-                UserId = userId
+                UserId = userId,
             };
         }
     }
 }
+

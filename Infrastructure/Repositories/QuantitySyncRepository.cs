@@ -26,22 +26,25 @@ namespace Infrastructure.Repositories
             foreach (var key in keys)
             {
                 var value = await db.StringGetAsync(key);
-                if (!value.HasValue) continue;
+                if (!value.HasValue)
+                    continue;
 
                 var parts = key.ToString().Replace("quantity_pending_", "").Split('_');
                 var tallySheetId = int.Parse(parts[0]);
-                var merchandiseId = int.Parse(parts[1]);
+                var clientId = int.Parse(parts[1]);
                 var quantity = int.Parse(value!);
 
-                var rows = await context.TallySheetMerchandises
-                     .Where(x => x.TallySheetId == tallySheetId && x.MerchandiseId == merchandiseId)
-                     .ExecuteUpdateAsync(x => x
-                         .SetProperty(p => p.Quantity, quantity)
-                         .SetProperty(p => p.LastUpdated, DateTime.UtcNow));
+                var rows = await context
+                    .TallySheetClients.Where(x =>
+                        x.TallySheetId == tallySheetId && x.ClientId == clientId
+                    )
+                    .ExecuteUpdateAsync(x =>
+                        x.SetProperty(p => p.Quantity, quantity)
+                            .SetProperty(p => p.LastUpdated, DateTime.UtcNow)
+                    );
 
                 await db.KeyDeleteAsync(key);
             }
         }
     }
-
 }

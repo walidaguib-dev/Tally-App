@@ -14,8 +14,10 @@ namespace Application
     {
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
-            services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(ServicesContainer).Assembly));
-            services.AddValidatorsFromAssembly(typeof(ServicesContainer).Assembly);            
+            services.AddMediatR(cfg =>
+                cfg.RegisterServicesFromAssembly(typeof(ServicesContainer).Assembly)
+            );
+            services.AddValidatorsFromAssembly(typeof(ServicesContainer).Assembly);
             return services;
         }
     }

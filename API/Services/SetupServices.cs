@@ -3,13 +3,14 @@ using Domain.Contracts;
 using Domain.Helpers;
 using Infrastructure.Repositories;
 using MediatR;
+
 namespace API.Services
 {
     public static class SetupServices
     {
         public static IServiceCollection AddAPIServices(this IServiceCollection services)
         {
-            // custom services 
+            // custom services
             services.AddScoped<IUser, UsersRepository>();
             services.AddScoped<ITokens, TokensRepository>();
             services.AddScoped<IEmail, EmailsRepository>();
@@ -23,17 +24,17 @@ namespace API.Services
             services.AddScoped<ITallySheet, TallySheetsRepository>();
             services.AddScoped<ITallySheetTruck, TallySheetTrucksRepository>();
             services.AddScoped<IPauses, PausesRepository>();
-            services.AddScoped<ITallySheetMerchandise, TallySheetMerchandiseRepository>();
+            services.AddScoped<ITallySheetClient, TallySheetClientsRepository>();
             services.AddScoped<IQuantitySync, QuantitySyncRepository>();
             // pipelines services
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
-            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(CacheInvalidationBehavior<,>));
-
+            services.AddTransient(
+                typeof(IPipelineBehavior<,>),
+                typeof(CacheInvalidationBehavior<,>)
+            );
 
             // Register API services here
             return services;
         }
-
-
     }
 }

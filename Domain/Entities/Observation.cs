@@ -1,7 +1,7 @@
-﻿using Domain.Enums;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Domain.Enums;
 
 namespace Domain.Entities
 {
@@ -14,13 +14,12 @@ namespace Domain.Entities
 
         // Relationships (flexible)
         public int? TallySheetId { get; set; }
-        public TallySheet? TallySheet { get; set; } 
+        public TallySheet? TallySheet { get; set; }
 
         public int? TallySheetMerchandiseId { get; set; }
-        public TallySheetMerchandise? TallySheetMerchandise { get; set; } 
+        public TallySheetClient? TallySheetClient { get; set; }
 
         public int? TallySheetTruckId { get; set; }
-        public TallySheetTruck? TallySheetTruck { get; set; } 
-
+        public TallySheetTruck? TallySheetTruck { get; set; }
     }
 }

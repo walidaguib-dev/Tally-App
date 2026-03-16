@@ -15,6 +15,5 @@ namespace Domain.Entities
         public DateTime UploadedAt { get; set; } = DateTime.UtcNow;
         public User User { get; set; } = null!;
         public UserProfile? profile { get; set; }
-
     }
 }

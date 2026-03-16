@@ -1,9 +1,9 @@
-﻿using Domain.Entities;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Domain.Entities;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infrastructure.Data.Configurations
 {
@@ -11,10 +11,7 @@ namespace Infrastructure.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<Observation> builder)
         {
-            
-            builder.Property(o => o.Type)
-                   .HasConversion<string>()
-                   .IsRequired();
+            builder.Property(o => o.Type).HasConversion<string>().IsRequired();
         }
     }
 }

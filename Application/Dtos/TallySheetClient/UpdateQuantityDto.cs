@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Application.Dtos.TallySheetMerchandise
+namespace Application.Dtos.TallySheetClient
 {
     public class UpdateQuantityDto
     {

@@ -1,7 +1,7 @@
-﻿using Domain.Enums;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Domain.Enums;
 
 namespace Domain.Entities
 {
@@ -19,7 +19,5 @@ namespace Domain.Entities
 
         public int TallySheetId { get; set; }
         public TallySheet TallySheet { get; set; } = null!;
-
-
     }
 }

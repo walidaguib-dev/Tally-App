@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -12,9 +13,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260315053110_FixNotesNullability")]
+    partial class FixNotesNullability
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -133,16 +136,16 @@ namespace Infrastructure.Migrations
                     b.Property<int?>("MerchandiseId")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("TallySheetClientClientId")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("TallySheetClientTallySheetId")
-                        .HasColumnType("integer");
-
                     b.Property<int?>("TallySheetId")
                         .HasColumnType("integer");
 
                     b.Property<int?>("TallySheetMerchandiseId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("TallySheetMerchandiseMerchandiseId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("TallySheetMerchandiseTallySheetId")
                         .HasColumnType("integer");
 
                     b.Property<int?>("TallySheetTruckId")
@@ -172,7 +175,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("TruckId");
 
-                    b.HasIndex("TallySheetClientTallySheetId", "TallySheetClientClientId");
+                    b.HasIndex("TallySheetMerchandiseTallySheetId", "TallySheetMerchandiseMerchandiseId");
 
                     b.HasIndex("TallySheetTruckTallySheetId", "TallySheetTruckTruckId");
 
@@ -320,12 +323,12 @@ namespace Infrastructure.Migrations
                     b.ToTable("TallySheets");
                 });
 
-            modelBuilder.Entity("Domain.Entities.TallySheetClient", b =>
+            modelBuilder.Entity("Domain.Entities.TallySheetMerchandise", b =>
                 {
                     b.Property<int>("TallySheetId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("ClientId")
+                    b.Property<int>("MerchandiseId")
                         .HasColumnType("integer");
 
                     b.Property<DateTime?>("LastUpdated")
@@ -341,11 +344,11 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.HasKey("TallySheetId", "ClientId");
+                    b.HasKey("TallySheetId", "MerchandiseId");
 
-                    b.HasIndex("ClientId");
+                    b.HasIndex("MerchandiseId");
 
-                    b.ToTable("TallySheetClients");
+                    b.ToTable("TallySheetMerchandises");
                 });
 
             modelBuilder.Entity("Domain.Entities.TallySheetTruck", b =>
@@ -721,9 +724,9 @@ namespace Infrastructure.Migrations
                         .WithMany("Observations")
                         .HasForeignKey("TruckId");
 
-                    b.HasOne("Domain.Entities.TallySheetClient", "TallySheetClient")
+                    b.HasOne("Domain.Entities.TallySheetMerchandise", "TallySheetMerchandise")
                         .WithMany("Observations")
-                        .HasForeignKey("TallySheetClientTallySheetId", "TallySheetClientClientId");
+                        .HasForeignKey("TallySheetMerchandiseTallySheetId", "TallySheetMerchandiseMerchandiseId");
 
                     b.HasOne("Domain.Entities.TallySheetTruck", "TallySheetTruck")
                         .WithMany("Observations")
@@ -731,7 +734,7 @@ namespace Infrastructure.Migrations
 
                     b.Navigation("TallySheet");
 
-                    b.Navigation("TallySheetClient");
+                    b.Navigation("TallySheetMerchandise");
 
                     b.Navigation("TallySheetTruck");
                 });
@@ -787,21 +790,21 @@ namespace Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Domain.Entities.TallySheetClient", b =>
+            modelBuilder.Entity("Domain.Entities.TallySheetMerchandise", b =>
                 {
-                    b.HasOne("Domain.Entities.Client", "Client")
-                        .WithMany("TallySheetClients")
-                        .HasForeignKey("ClientId")
+                    b.HasOne("Domain.Entities.Merchandise", "Merchandise")
+                        .WithMany("TallySheetMerchandises")
+                        .HasForeignKey("MerchandiseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.TallySheet", "TallySheet")
-                        .WithMany("TallySheetClients")
+                        .WithMany("TallySheetMerchandises")
                         .HasForeignKey("TallySheetId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Client");
+                    b.Navigation("Merchandise");
 
                     b.Navigation("TallySheet");
                 });
@@ -905,16 +908,13 @@ namespace Infrastructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Domain.Entities.Client", b =>
-                {
-                    b.Navigation("TallySheetClients");
-                });
-
             modelBuilder.Entity("Domain.Entities.Merchandise", b =>
                 {
                     b.Navigation("Clients");
 
                     b.Navigation("Observations");
+
+                    b.Navigation("TallySheetMerchandises");
                 });
 
             modelBuilder.Entity("Domain.Entities.Ship", b =>
@@ -926,12 +926,12 @@ namespace Infrastructure.Migrations
                 {
                     b.Navigation("Observations");
 
-                    b.Navigation("TallySheetClients");
+                    b.Navigation("TallySheetMerchandises");
 
                     b.Navigation("TallySheetTrucks");
                 });
 
-            modelBuilder.Entity("Domain.Entities.TallySheetClient", b =>
+            modelBuilder.Entity("Domain.Entities.TallySheetMerchandise", b =>
                 {
                     b.Navigation("Observations");
                 });

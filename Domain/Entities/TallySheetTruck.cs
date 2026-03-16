@@ -7,7 +7,6 @@ namespace Domain.Entities
 {
     public class TallySheetTruck
     {
-
         public int TallySheetId { get; set; }
         public TallySheet TallySheet { get; set; } = null!;
 
@@ -21,6 +20,5 @@ namespace Domain.Entities
         // Relationships
         public ICollection<Pause> Pauses { get; set; } = [];
         public ICollection<Observation> Observations { get; set; } = [];
-
     }
 }

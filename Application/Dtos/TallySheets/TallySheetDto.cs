@@ -14,11 +14,12 @@ namespace Application.Dtos.TallySheets
         public int TeamsCount { get; set; }
         public ShiftType Shift { get; set; }
         public ZoneType Zone { get; set; }
+
         // Relationships
         public int ShipId { get; set; }
         public string UserId { get; set; } = null!;
 
-        public ICollection<Domain.Entities.TallySheetMerchandise> TallySheetMerchandises { get; set; } = [];
+        public ICollection<Domain.Entities.TallySheetClient> TallySheetClients { get; set; } = [];
         public ICollection<TallySheetTruck> TallySheetTrucks { get; set; } = [];
         public ICollection<Observation> Observations { get; set; } = [];
     }

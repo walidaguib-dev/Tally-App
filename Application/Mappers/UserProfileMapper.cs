@@ -10,7 +10,6 @@ namespace Application.Mappers
     {
         public static UserProfile MapToEntity(this CreateUserProfileDto model)
         {
-
             return new UserProfile
             {
                 Id = model.Id,

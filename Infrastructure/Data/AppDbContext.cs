@@ -21,7 +21,7 @@ namespace Infrastructure.Data
         public DbSet<Merchandise> Merchandises { get; set; }
         public DbSet<Ship> Ships { get; set; }
         public DbSet<Observation> Observations { get; set; }
-        public DbSet<TallySheetMerchandise> TallySheetMerchandises { get; set; }
+        public DbSet<TallySheetClient> TallySheetClients { get; set; }
         public DbSet<TallySheetTruck> TallySheetTrucks { get; set; }
         public DbSet<Truck> Trucks { get; set; }
         public DbSet<Client> Clients { get; set; }

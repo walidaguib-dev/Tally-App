@@ -2,20 +2,20 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Application.Dtos.TallySheetMerchandise;
+using Application.Dtos.TallySheetClient;
 using Domain.Entities;
 
 namespace Application.Mappers
 {
-    public static class TallySheetMerchandiseMapper
+    public static class TallySheetClientMapper
     {
-        public static TallySheetMerchandiseDto MapToDto(this TallySheetMerchandise item)
+        public static TallySheetClientDto MapToDto(this TallySheetClient item)
         {
-            return new TallySheetMerchandiseDto
+            return new TallySheetClientDto
             {
                 TallySheetId = item.TallySheetId,
-                MerchandiseId = item.MerchandiseId,
-                MerchandiseName = item.Merchandise?.Name ?? "Unknown",
+                ClientId = item.ClientId,
+                ClientName = item.Client?.Name ?? "Unknown",
                 Quantity = item.Quantity,
                 Unit = item.Unit,
                 Notes = item.Notes,
@@ -23,12 +23,12 @@ namespace Application.Mappers
             };
         }
 
-        public static TallySheetMerchandise MapToEntity(this AddMerchandiseToTallyDto dto)
+        public static TallySheetClient MapToEntity(this AddClientToTallyDto dto)
         {
-            return new TallySheetMerchandise
+            return new TallySheetClient
             {
                 TallySheetId = dto.TallySheetId,
-                MerchandiseId = dto.MerchandiseId,
+                ClientId = dto.ClientId,
                 Quantity = dto.Quantity,
                 Unit = dto.Unit.ToLower(),
                 Notes = dto.Notes!,

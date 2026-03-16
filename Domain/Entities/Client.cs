@@ -14,6 +14,6 @@ namespace Domain.Entities
         // Relationships
         public int MerchandiseId { get; set; }
         public Merchandise Merchandise { get; set; } = null!;
-
+        public List<TallySheetClient> TallySheetClients { get; set; } = [];
     }
 }

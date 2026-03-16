@@ -1,8 +1,8 @@
-﻿using Application.Dtos.Mail;
-using Domain.Entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Application.Dtos.Mail;
+using Domain.Entities;
 
 namespace Application.Mappers
 {
@@ -17,7 +17,7 @@ namespace Application.Mappers
                 ExpiresAt = emailToken.ExpiresAt,
                 CreatedAt = emailToken.CreatedAt,
                 ConsumedAt = emailToken.ConsumedAt,
-                Purpose = emailToken.Purpose
+                Purpose = emailToken.Purpose,
             };
         }
     }

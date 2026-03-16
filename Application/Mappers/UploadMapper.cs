@@ -17,7 +17,7 @@ namespace Application.Mappers
                 FileType = upload.FileType,
                 FileSize = upload.FileSize,
                 UploadedAt = upload.UploadedAt,
-                username = upload.User.UserName!
+                username = upload.User.UserName!,
             };
         }
     }

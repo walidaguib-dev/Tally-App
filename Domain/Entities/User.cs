@@ -9,7 +9,7 @@ namespace Domain.Entities
     {
         public RefreshToken refreshToken { get; set; } = null!;
         public UserProfile? profile { get; set; }
-        public List<EmailToken> EmailTokens { get; set; } = new List<EmailToken>();
+        public List<EmailToken> EmailTokens { get; set; } = [];
         public List<Uploads> Upload { get; set; } = [];
     }
 }
