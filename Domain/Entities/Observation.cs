@@ -10,16 +10,15 @@ namespace Domain.Entities
         public int Id { get; set; }
         public ObservationType Type { get; set; }
         public string Description { get; set; } = string.Empty;
-        public DateTime Timestamp { get; set; } = DateTime.UtcNow;
+        public TimeOnly Timestamp { get; set; } = TimeOnly.FromDateTime(DateTime.UtcNow);
 
         // Relationships (flexible)
-        public int? TallySheetId { get; set; }
-        public TallySheet? TallySheet { get; set; }
+        public int TallySheetId { get; set; }
+        public TallySheet TallySheet { get; set; } = null!;
 
-        public int? TallySheetMerchandiseId { get; set; }
-        public TallySheetClient? TallySheetClient { get; set; }
-
-        public int? TallySheetTruckId { get; set; }
-        public TallySheetTruck? TallySheetTruck { get; set; }
+        public int? ClientId { get; set; }
+        public Client? Client { get; set; }
+        public int? TruckId { get; set; }
+        public Truck? Truck { get; set; }
     }
 }

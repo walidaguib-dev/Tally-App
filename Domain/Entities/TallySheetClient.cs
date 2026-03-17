@@ -17,6 +17,5 @@ namespace Domain.Entities
         public string Unit { get; set; } = null!;
         public string? Notes { get; set; } = null!;
         public List<Observation> Observations { get; set; } = [];
-
     }
 }

@@ -6,9 +6,27 @@ namespace Domain.Enums
 {
     public enum ObservationType
     {
+        // Merchandise condition
+        Damaged,
+        Wet,
+        Contaminated,
+
+        // Quantity issues
+        Shortage,
+        Excess,
+        Mismatch,
+
+        // Truck specific
+        TruckDamaged, // truck arrived damaged
+        TruckOverloaded, // exceeded capacity
+        TruckAbandoned, // left without completing
+
+        // Operational
         Weather,
-        Damage,
         Congestion,
-        Other
+        EquipmentFault,
+
+        // General
+        Other,
     }
 }

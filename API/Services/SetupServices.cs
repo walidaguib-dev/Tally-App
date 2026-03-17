@@ -26,6 +26,7 @@ namespace API.Services
             services.AddScoped<IPauses, PausesRepository>();
             services.AddScoped<ITallySheetClient, TallySheetClientsRepository>();
             services.AddScoped<IQuantitySync, QuantitySyncRepository>();
+            services.AddScoped<IObservations, ObservationsRepository>();
             // pipelines services
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
             services.AddTransient(
