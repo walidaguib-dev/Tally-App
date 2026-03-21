@@ -18,6 +18,7 @@ namespace Application.Validators.Pauses
             // StartTime: must be a valid time (you can add custom rules if needed)
             RuleFor(x => x.Dto.StartTime)
                 .NotNull()
+                .Must(x => x >= TimeOnly.FromDateTime(DateTime.UtcNow))
                 .WithMessage("Start time is required.").WithName("Pause starting time");
 
             // Notes: optional, but limit length if provided

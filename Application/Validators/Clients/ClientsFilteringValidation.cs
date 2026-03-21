@@ -14,10 +14,10 @@ namespace Application.Validators.Clients
         {
             Include(new PaginationParamsValidator());
             RuleFor(x => x.Name)
-            .MaximumLength(100).WithMessage("Name is too long.")
-            .When(x => x.Name is not null)
-            .WithName("Name");
-
+                .MaximumLength(100)
+                .WithMessage("Name is too long.")
+                .When(x => x.Name is not null)
+                .WithName("Name");
         }
     }
 }

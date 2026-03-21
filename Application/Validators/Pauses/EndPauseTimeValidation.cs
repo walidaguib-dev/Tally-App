@@ -12,7 +12,7 @@ namespace Application.Validators.Pauses
         public EndPauseTimeValidation()
         {
             RuleFor(x => x.Dto.EndTime)
-                .NotNull()
+                .NotEmpty()
                 .NotEmpty()
                 .WithMessage("Ending time is required");
         }

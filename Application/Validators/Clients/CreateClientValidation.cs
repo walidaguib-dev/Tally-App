@@ -1,9 +1,9 @@
-﻿using Application.Commands.Clients;
-using Application.Dtos.Clients;
-using FluentValidation;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Application.Commands.Clients;
+using Application.Dtos.Clients;
+using FluentValidation;
 
 namespace Application.Validators.Clients
 {
@@ -26,11 +26,10 @@ namespace Application.Validators.Clients
                 .WithMessage("Bill of lading must have at least one BL")
                 .WithName("B/L");
             RuleFor(x => x.Dto.MerchandiseId)
-             .GreaterThan(0)
-             .NotNull()
-             .WithMessage("Merchandise id is required")
-             .WithName("Merchandise id");
-
+                .GreaterThan(0)
+                .NotNull()
+                .WithMessage("Merchandise id is required")
+                .WithName("Merchandise id");
         }
     }
 }
