@@ -52,10 +52,11 @@ builder.Host.UseSerilog();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-    app.MapScalarApiReference(options =>
+
+app.MapOpenApi();
+app.MapScalarApiReference(
+    "/docs",
+    options =>
     {
         options.Title = "Tally API";
         options.DarkMode = true;
@@ -71,8 +72,8 @@ if (app.Environment.IsDevelopment())
                     }
                 )
         );
-    });
-}
+    }
+);
 
 using (var scope = app.Services.CreateScope())
 {
