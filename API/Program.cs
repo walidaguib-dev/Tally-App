@@ -70,6 +70,7 @@ app.MapScalarApiReference(
     {
         options.Title = "Tally API";
         options.DarkMode = true;
+        options.BaseServerUrl = "https://tally-app-production.up.railway.app/";
         options.DefaultHttpClient = new(ScalarTarget.CSharp, ScalarClient.HttpClient);
         app.MapScalarApiReference(options =>
             options
@@ -98,6 +99,7 @@ app.UseHttpsRedirection();
 
 app.UseGlobalExceptionHandling(app.Environment);
 app.UseRateLimiter();
+app.UseCors("AllowAll");
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseSerilogRequestLogging();
