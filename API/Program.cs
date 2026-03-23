@@ -32,6 +32,16 @@ builder.Services.AddOpenApi(
         options.AddDocumentTransformer<OpenApiTransformer>();
     }
 );
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(
+        name: "AllowAll",
+        policy =>
+        {
+            policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+        }
+    );
+});
 builder.Services.AddLoggingConfiguration(builder.Configuration);
 builder.Services.AddApplication().AddInfrastructure(builder);
 builder.Services.AddAPIServices();
@@ -81,6 +91,8 @@ using (var scope = app.Services.CreateScope())
 
     await db.Database.MigrateAsync(); // applies any pending migrations
 }
+
+app.UseCors("AllowAll");
 
 app.UseHttpsRedirection();
 
