@@ -13,5 +13,6 @@ namespace Domain.Entities
 
         // Relationships
         public List<TallySheet> tallySheets { get; set; } = [];
+        public List<Cars> CarsList { get; set; } = [];
     }
 }

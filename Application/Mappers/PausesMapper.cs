@@ -21,7 +21,7 @@ namespace Application.Mappers
                 EndTime = pause.EndTime ?? null, // If EndTime is null, use current time for duration calculation
                 DurationMinutes = pause.EndTime > pause.StartTime ? duration : null,
                 Notes = pause.Notes,
-                TruckName = pause.Truck?.PlateNumber
+                TruckName = pause.Truck?.PlateNumber,
             };
         }
 
@@ -30,11 +30,13 @@ namespace Application.Mappers
             return new Pause
             {
                 StartTime = createPauseDto.StartTime,
-                Reason = Enum.TryParse<PauseReason>(createPauseDto.Reason, true, out var reason) ? reason : PauseReason.Other,
+                Reason = Enum.TryParse<PauseReason>(createPauseDto.Reason, true, out var reason)
+                    ? reason
+                    : PauseReason.Other,
                 Notes = createPauseDto.Notes,
                 EndTime = null,
                 TallySheetId = createPauseDto.TallySheetId,
-                TruckId = createPauseDto.TruckId // temporarily set to now, should be updated when the pause ends
+                TruckId = createPauseDto.TruckId, // temporarily set to now, should be updated when the pause ends
             };
         }
     }

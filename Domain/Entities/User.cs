@@ -11,5 +11,6 @@ namespace Domain.Entities
         public UserProfile? profile { get; set; }
         public List<EmailToken> EmailTokens { get; set; } = [];
         public List<Uploads> Upload { get; set; } = [];
+        public List<Cars> CarsList { get; set; } = [];
     }
 }
