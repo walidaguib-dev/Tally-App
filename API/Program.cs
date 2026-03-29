@@ -1,4 +1,3 @@
-using API.Hubs;
 using API.Services;
 using Application;
 using Application.Helpers;
@@ -106,7 +105,6 @@ app.UseAuthorization();
 app.UseSerilogRequestLogging();
 app.MapControllers();
 app.UseHangfireDashboard("/hangfire", new DashboardOptions { Authorization = [new JobsAuth()] });
-app.MapHub<NotificationsHub>("hubs/notifications");
 RecurringJob.AddOrUpdate<QuantitySyncJob>(
     "sync-pending-quantities",
     job => job.SyncQuantities(),
