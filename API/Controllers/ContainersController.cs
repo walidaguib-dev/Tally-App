@@ -47,7 +47,7 @@ namespace API.Controllers
         {
             var command = new CreateContainerCommand(containerDto);
             var result = await _mediator.Send(command);
-            return Ok(result);
+            return Created();
         }
 
         [HttpPatch("{ContainerNumber}")]

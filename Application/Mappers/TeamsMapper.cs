@@ -40,7 +40,7 @@ namespace Application.Mappers
             return new TeamMember
             {
                 Role = dto.Role,
-                UserId = dto.Role,
+                UserId = dto.UserId,
                 TeamId = dto.TeamId,
             };
         }

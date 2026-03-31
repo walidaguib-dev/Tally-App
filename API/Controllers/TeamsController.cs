@@ -44,7 +44,7 @@ namespace API.Controllers
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var command = new CreateTeamCommand(dto, userId!);
             var result = await mediator.Send(command);
-            return Ok(result);
+            return Created();
         }
 
         [HttpPatch("update-team/{Id:int}")]
@@ -76,7 +76,7 @@ namespace API.Controllers
         {
             var command = new CreateTeamMemberCommand(dto);
             var result = await mediator.Send(command);
-            return Ok(result);
+            return Created();
         }
 
         [HttpDelete("remove-member/{teamId:int}/{userId}")]
