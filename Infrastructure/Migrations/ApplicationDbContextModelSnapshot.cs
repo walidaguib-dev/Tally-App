@@ -396,6 +396,9 @@ namespace Infrastructure.Migrations
                     b.Property<int>("ShipId")
                         .HasColumnType("integer");
 
+                    b.Property<int?>("TeamId")
+                        .HasColumnType("integer");
+
                     b.Property<int>("TeamsCount")
                         .HasColumnType("integer");
 
@@ -410,6 +413,8 @@ namespace Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ShipId");
+
+                    b.HasIndex("TeamId");
 
                     b.HasIndex("UserId");
 
@@ -463,6 +468,63 @@ namespace Infrastructure.Migrations
                     b.HasIndex("TruckId");
 
                     b.ToTable("TallySheetTrucks");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Teams.Team", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("SupervisorId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SupervisorId");
+
+                    b.ToTable("Teams");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Teams.TeamMember", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("JoinedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("TeamId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TeamId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("TeamMembers");
                 });
 
             modelBuilder.Entity("Domain.Entities.Truck", b =>
@@ -822,7 +884,7 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entities.Container", b =>
                 {
                     b.HasOne("Domain.Entities.Client", "Client")
-                        .WithMany()
+                        .WithMany("Containers")
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -928,6 +990,10 @@ namespace Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Domain.Entities.Teams.Team", null)
+                        .WithMany("TallySheets")
+                        .HasForeignKey("TeamId");
+
                     b.HasOne("Domain.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
@@ -975,6 +1041,36 @@ namespace Infrastructure.Migrations
                     b.Navigation("TallySheet");
 
                     b.Navigation("Truck");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Teams.Team", b =>
+                {
+                    b.HasOne("Domain.Entities.User", "Supervisor")
+                        .WithMany()
+                        .HasForeignKey("SupervisorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Supervisor");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Teams.TeamMember", b =>
+                {
+                    b.HasOne("Domain.Entities.Teams.Team", "Team")
+                        .WithMany("Members")
+                        .HasForeignKey("TeamId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Team");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Domain.Entities.Uploads", b =>
@@ -1059,6 +1155,8 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.Client", b =>
                 {
+                    b.Navigation("Containers");
+
                     b.Navigation("TallySheetClients");
                 });
 
@@ -1095,6 +1193,13 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entities.TallySheetTruck", b =>
                 {
                     b.Navigation("Pauses");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Teams.Team", b =>
+                {
+                    b.Navigation("Members");
+
+                    b.Navigation("TallySheets");
                 });
 
             modelBuilder.Entity("Domain.Entities.Truck", b =>

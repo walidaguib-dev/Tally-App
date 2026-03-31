@@ -1,5 +1,6 @@
 ﻿using System.Reflection.Emit;
 using Domain.Entities;
+using Domain.Entities.Teams;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -26,6 +27,8 @@ namespace Infrastructure.Data
         public DbSet<Client> Clients { get; set; }
         public DbSet<Cars> Cars { get; set; }
         public DbSet<Container> Containers { get; set; }
+        public DbSet<Team> Teams { get; set; }
+        public DbSet<TeamMember> TeamMembers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

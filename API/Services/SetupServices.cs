@@ -29,6 +29,7 @@ namespace API.Services
             services.AddScoped<IObservations, ObservationsRepository>();
             services.AddScoped<ICars, CarsRepository>();
             services.AddScoped<IContainers, ContainersRepository>();
+            services.AddScoped<ITeams, TeamsRepository>();
             // pipelines services
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
             services.AddTransient(

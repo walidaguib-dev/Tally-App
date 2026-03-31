@@ -20,7 +20,6 @@ namespace Domain.Entities
         public TallySheet TallySheet { get; set; } = null!;
         public int ShipId { get; set; }
         public Ship Ship { get; set; } = null!;
-
         public DateTime RecordedAt { get; set; }
     }
 }

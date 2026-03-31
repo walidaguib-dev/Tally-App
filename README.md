@@ -198,7 +198,7 @@ DELETE /api/uploads/{id}
 
 ### 1. Clone the repository
 ```bash
-git clone https://github.com/yourusername/tally-api.git
+git clone https://github.com/walidaguib-dev/tally-api.git
 cd tally-api
 ```
 
