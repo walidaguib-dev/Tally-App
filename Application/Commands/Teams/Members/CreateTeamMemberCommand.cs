@@ -14,6 +14,6 @@ namespace Application.Commands.Teams.Members
     {
         public List<string> CacheKeys => [];
 
-        public List<string> CacheTags => ["members"];
+        public List<string> CacheTags => ["members", "teams"];
     }
 }

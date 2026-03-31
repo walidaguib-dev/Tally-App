@@ -46,6 +46,7 @@ namespace Infrastructure.Repositories
                         .AsSplitQuery()
                         .Include(x => x.Supervisor)
                         .Include(x => x.Members)
+                            .ThenInclude(x => x.User)
                         .ToListAsync(token);
                 },
                 TimeSpan.FromMinutes(20),
@@ -63,9 +64,9 @@ namespace Infrastructure.Repositories
                 {
                     return await context
                         .Teams.AsNoTracking()
-                        .AsSplitQuery()
                         .Include(x => x.Supervisor)
                         .Include(x => x.Members)
+                            .ThenInclude(x => x.User)
                         .FirstOrDefaultAsync(x => x.Id == id, token);
                 },
                 TimeSpan.FromMinutes(10),

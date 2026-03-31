@@ -28,6 +28,7 @@ namespace Application.Mappers
         {
             return new TeamMemberDto
             {
+                Id = item.Id,
                 Username = item.User.UserName!,
                 UserId = item.UserId,
                 Role = item.Role,
