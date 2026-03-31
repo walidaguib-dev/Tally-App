@@ -13,8 +13,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260330015240_AddTeamAndMembers")]
-    partial class AddTeamAndMembers
+    [Migration("20260312171809_DeletedIdfromTallySheetTruckSchema")]
+    partial class DeletedIdfromTallySheetTruckSchema
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,60 +25,6 @@ namespace Infrastructure.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
-
-            modelBuilder.Entity("Domain.Entities.Cars", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Bill_Of_Lading")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Brand")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("RecordedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<int>("ShipId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("TallySheetId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("VinNumber")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("carStatus")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ShipId");
-
-                    b.HasIndex("TallySheetId");
-
-                    b.HasIndex("UserId");
-
-                    b.HasIndex("VinNumber")
-                        .IsUnique();
-
-                    b.ToTable("Cars");
-                });
 
             modelBuilder.Entity("Domain.Entities.Client", b =>
                 {
@@ -113,57 +59,6 @@ namespace Infrastructure.Migrations
                     b.HasIndex("MerchandiseId1");
 
                     b.ToTable("Clients");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Container", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Bill_of_lading")
-                        .HasColumnType("text");
-
-                    b.Property<int>("ClientId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("ContainerNumber")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("ContainerSize")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("ContainerStatus")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("ContainerType")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("SealNumber")
-                        .HasColumnType("text");
-
-                    b.Property<int>("TallySheetId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("userId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ClientId");
-
-                    b.HasIndex("ContainerNumber")
-                        .IsUnique();
-
-                    b.HasIndex("TallySheetId");
-
-                    b.HasIndex("userId");
-
-                    b.ToTable("Containers");
                 });
 
             modelBuilder.Entity("Domain.Entities.EmailToken", b =>
@@ -234,9 +129,6 @@ namespace Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("ClientId")
-                        .HasColumnType("integer");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("text");
@@ -244,17 +136,29 @@ namespace Infrastructure.Migrations
                     b.Property<int?>("MerchandiseId")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("TallySheetClientClientId")
+                    b.Property<int?>("TallySheetId")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("TallySheetClientTallySheetId")
+                    b.Property<int?>("TallySheetMerchandiseId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("TallySheetId")
+                    b.Property<int?>("TallySheetMerchandiseMerchandiseId")
                         .HasColumnType("integer");
 
-                    b.Property<TimeOnly>("Timestamp")
-                        .HasColumnType("time without time zone");
+                    b.Property<int?>("TallySheetMerchandiseTallySheetId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("TallySheetTruckId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("TallySheetTruckTallySheetId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("TallySheetTruckTruckId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("Timestamp")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int?>("TruckId")
                         .HasColumnType("integer");
@@ -265,15 +169,15 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ClientId");
-
                     b.HasIndex("MerchandiseId");
 
                     b.HasIndex("TallySheetId");
 
                     b.HasIndex("TruckId");
 
-                    b.HasIndex("TallySheetClientTallySheetId", "TallySheetClientClientId");
+                    b.HasIndex("TallySheetMerchandiseTallySheetId", "TallySheetMerchandiseMerchandiseId");
+
+                    b.HasIndex("TallySheetTruckTallySheetId", "TallySheetTruckTruckId");
 
                     b.ToTable("Observations");
                 });
@@ -299,7 +203,10 @@ namespace Infrastructure.Migrations
                     b.Property<TimeOnly>("StartTime")
                         .HasColumnType("time without time zone");
 
-                    b.Property<int>("TallySheetId")
+                    b.Property<int?>("TallySheetId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("TallySheetTruckId")
                         .HasColumnType("integer");
 
                     b.Property<int?>("TallySheetTruckTallySheetId")
@@ -308,14 +215,9 @@ namespace Infrastructure.Migrations
                     b.Property<int?>("TallySheetTruckTruckId")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("TruckId")
-                        .HasColumnType("integer");
-
                     b.HasKey("Id");
 
                     b.HasIndex("TallySheetId");
-
-                    b.HasIndex("TruckId");
 
                     b.HasIndex("TallySheetTruckTallySheetId", "TallySheetTruckTruckId");
 
@@ -399,9 +301,6 @@ namespace Infrastructure.Migrations
                     b.Property<int>("ShipId")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("TeamId")
-                        .HasColumnType("integer");
-
                     b.Property<int>("TeamsCount")
                         .HasColumnType("integer");
 
@@ -417,25 +316,24 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("ShipId");
 
-                    b.HasIndex("TeamId");
-
                     b.HasIndex("UserId");
 
                     b.ToTable("TallySheets");
                 });
 
-            modelBuilder.Entity("Domain.Entities.TallySheetClient", b =>
+            modelBuilder.Entity("Domain.Entities.TallySheetMerchandise", b =>
                 {
                     b.Property<int>("TallySheetId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("ClientId")
+                    b.Property<int>("MerchandiseId")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime?>("LastUpdated")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<int>("Id")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Notes")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<int>("Quantity")
@@ -445,11 +343,11 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.HasKey("TallySheetId", "ClientId");
+                    b.HasKey("TallySheetId", "MerchandiseId");
 
-                    b.HasIndex("ClientId");
+                    b.HasIndex("MerchandiseId");
 
-                    b.ToTable("TallySheetClients");
+                    b.ToTable("TallySheetMerchandises");
                 });
 
             modelBuilder.Entity("Domain.Entities.TallySheetTruck", b =>
@@ -471,63 +369,6 @@ namespace Infrastructure.Migrations
                     b.HasIndex("TruckId");
 
                     b.ToTable("TallySheetTrucks");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Teams.Team", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Description")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("SupervisorId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SupervisorId");
-
-                    b.ToTable("Teams");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Teams.TeamMember", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("JoinedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Role")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("TeamId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TeamId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("TeamMembers");
                 });
 
             modelBuilder.Entity("Domain.Entities.Truck", b =>
@@ -842,33 +683,6 @@ namespace Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Domain.Entities.Cars", b =>
-                {
-                    b.HasOne("Domain.Entities.Ship", "Ship")
-                        .WithMany("CarsList")
-                        .HasForeignKey("ShipId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Entities.TallySheet", "TallySheet")
-                        .WithMany("CarsList")
-                        .HasForeignKey("TallySheetId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Entities.User", "User")
-                        .WithMany("CarsList")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Ship");
-
-                    b.Navigation("TallySheet");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("Domain.Entities.Client", b =>
                 {
                     b.HasOne("Domain.Entities.Merchandise", "Merchandise")
@@ -884,33 +698,6 @@ namespace Infrastructure.Migrations
                     b.Navigation("Merchandise");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Container", b =>
-                {
-                    b.HasOne("Domain.Entities.Client", "Client")
-                        .WithMany("Containers")
-                        .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Entities.TallySheet", "TallySheet")
-                        .WithMany()
-                        .HasForeignKey("TallySheetId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Entities.User", "user")
-                        .WithMany()
-                        .HasForeignKey("userId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Client");
-
-                    b.Navigation("TallySheet");
-
-                    b.Navigation("user");
-                });
-
             modelBuilder.Entity("Domain.Entities.EmailToken", b =>
                 {
                     b.HasOne("Domain.Entities.User", "User")
@@ -924,54 +711,46 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.Observation", b =>
                 {
-                    b.HasOne("Domain.Entities.Client", "Client")
-                        .WithMany()
-                        .HasForeignKey("ClientId");
-
                     b.HasOne("Domain.Entities.Merchandise", null)
                         .WithMany("Observations")
                         .HasForeignKey("MerchandiseId");
 
                     b.HasOne("Domain.Entities.TallySheet", "TallySheet")
                         .WithMany("Observations")
-                        .HasForeignKey("TallySheetId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("TallySheetId");
 
-                    b.HasOne("Domain.Entities.Truck", "Truck")
+                    b.HasOne("Domain.Entities.Truck", null)
                         .WithMany("Observations")
                         .HasForeignKey("TruckId");
 
-                    b.HasOne("Domain.Entities.TallySheetClient", null)
-                        .WithMany("Observations")
-                        .HasForeignKey("TallySheetClientTallySheetId", "TallySheetClientClientId");
+                    b.HasOne("Domain.Entities.TallySheetMerchandise", "TallySheetMerchandise")
+                        .WithMany("observations")
+                        .HasForeignKey("TallySheetMerchandiseTallySheetId", "TallySheetMerchandiseMerchandiseId");
 
-                    b.Navigation("Client");
+                    b.HasOne("Domain.Entities.TallySheetTruck", "TallySheetTruck")
+                        .WithMany("Observations")
+                        .HasForeignKey("TallySheetTruckTallySheetId", "TallySheetTruckTruckId");
 
                     b.Navigation("TallySheet");
 
-                    b.Navigation("Truck");
+                    b.Navigation("TallySheetMerchandise");
+
+                    b.Navigation("TallySheetTruck");
                 });
 
             modelBuilder.Entity("Domain.Entities.Pause", b =>
                 {
                     b.HasOne("Domain.Entities.TallySheet", "TallySheet")
                         .WithMany()
-                        .HasForeignKey("TallySheetId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("TallySheetId");
 
-                    b.HasOne("Domain.Entities.Truck", "Truck")
-                        .WithMany("Pauses")
-                        .HasForeignKey("TruckId");
-
-                    b.HasOne("Domain.Entities.TallySheetTruck", null)
+                    b.HasOne("Domain.Entities.TallySheetTruck", "TallySheetTruck")
                         .WithMany("Pauses")
                         .HasForeignKey("TallySheetTruckTallySheetId", "TallySheetTruckTruckId");
 
                     b.Navigation("TallySheet");
 
-                    b.Navigation("Truck");
+                    b.Navigation("TallySheetTruck");
                 });
 
             modelBuilder.Entity("Domain.Entities.RefreshToken", b =>
@@ -993,10 +772,6 @@ namespace Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Entities.Teams.Team", null)
-                        .WithMany("TallySheets")
-                        .HasForeignKey("TeamId");
-
                     b.HasOne("Domain.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
@@ -1008,21 +783,21 @@ namespace Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Domain.Entities.TallySheetClient", b =>
+            modelBuilder.Entity("Domain.Entities.TallySheetMerchandise", b =>
                 {
-                    b.HasOne("Domain.Entities.Client", "Client")
-                        .WithMany("TallySheetClients")
-                        .HasForeignKey("ClientId")
+                    b.HasOne("Domain.Entities.Merchandise", "Merchandise")
+                        .WithMany("TallySheetMerchandises")
+                        .HasForeignKey("MerchandiseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.TallySheet", "TallySheet")
-                        .WithMany("TallySheetClients")
+                        .WithMany("TallySheetMerchandises")
                         .HasForeignKey("TallySheetId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Client");
+                    b.Navigation("Merchandise");
 
                     b.Navigation("TallySheet");
                 });
@@ -1044,36 +819,6 @@ namespace Infrastructure.Migrations
                     b.Navigation("TallySheet");
 
                     b.Navigation("Truck");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Teams.Team", b =>
-                {
-                    b.HasOne("Domain.Entities.User", "Supervisor")
-                        .WithMany()
-                        .HasForeignKey("SupervisorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Supervisor");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Teams.TeamMember", b =>
-                {
-                    b.HasOne("Domain.Entities.Teams.Team", "Team")
-                        .WithMany("Members")
-                        .HasForeignKey("TeamId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Entities.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Team");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Domain.Entities.Uploads", b =>
@@ -1156,60 +901,44 @@ namespace Infrastructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Domain.Entities.Client", b =>
-                {
-                    b.Navigation("Containers");
-
-                    b.Navigation("TallySheetClients");
-                });
-
             modelBuilder.Entity("Domain.Entities.Merchandise", b =>
                 {
                     b.Navigation("Clients");
 
                     b.Navigation("Observations");
+
+                    b.Navigation("TallySheetMerchandises");
                 });
 
             modelBuilder.Entity("Domain.Entities.Ship", b =>
                 {
-                    b.Navigation("CarsList");
-
                     b.Navigation("tallySheets");
                 });
 
             modelBuilder.Entity("Domain.Entities.TallySheet", b =>
                 {
-                    b.Navigation("CarsList");
-
                     b.Navigation("Observations");
 
-                    b.Navigation("TallySheetClients");
+                    b.Navigation("TallySheetMerchandises");
 
                     b.Navigation("TallySheetTrucks");
                 });
 
-            modelBuilder.Entity("Domain.Entities.TallySheetClient", b =>
+            modelBuilder.Entity("Domain.Entities.TallySheetMerchandise", b =>
                 {
-                    b.Navigation("Observations");
+                    b.Navigation("observations");
                 });
 
             modelBuilder.Entity("Domain.Entities.TallySheetTruck", b =>
                 {
+                    b.Navigation("Observations");
+
                     b.Navigation("Pauses");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Teams.Team", b =>
-                {
-                    b.Navigation("Members");
-
-                    b.Navigation("TallySheets");
                 });
 
             modelBuilder.Entity("Domain.Entities.Truck", b =>
                 {
                     b.Navigation("Observations");
-
-                    b.Navigation("Pauses");
 
                     b.Navigation("TallySheetTrucks");
                 });
@@ -1221,8 +950,6 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.User", b =>
                 {
-                    b.Navigation("CarsList");
-
                     b.Navigation("EmailTokens");
 
                     b.Navigation("Upload");
