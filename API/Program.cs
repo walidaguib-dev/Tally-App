@@ -94,7 +94,7 @@ using (var scope = app.Services.CreateScope())
     await db.Database.MigrateAsync(); // applies any pending migrations
 }
 
-// await DataSeeder.SeedAsync(app.Services);
+await DataSeeder.SeedAsync(app.Services);
 
 app.UseCors("AllowAll");
 
