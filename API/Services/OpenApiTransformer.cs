@@ -4,9 +4,15 @@ using Microsoft.OpenApi;
 
 namespace API.Services
 {
-    public sealed class OpenApiTransformer(IAuthenticationSchemeProvider authenticationSchemeProvider) : IOpenApiDocumentTransformer
+    public sealed class OpenApiTransformer(
+        IAuthenticationSchemeProvider authenticationSchemeProvider
+    ) : IOpenApiDocumentTransformer
     {
-        public async Task TransformAsync(OpenApiDocument document, OpenApiDocumentTransformerContext context, CancellationToken cancellationToken)
+        public async Task TransformAsync(
+            OpenApiDocument document,
+            OpenApiDocumentTransformerContext context,
+            CancellationToken cancellationToken
+        )
         {
             var schemes = await authenticationSchemeProvider.GetAllSchemesAsync();
 
@@ -16,7 +22,8 @@ namespace API.Services
             document.Components ??= new OpenApiComponents();
 
             if (document.Components.SecuritySchemes == null)
-                document.Components.SecuritySchemes = new Dictionary<string, IOpenApiSecurityScheme>();
+                document.Components.SecuritySchemes =
+                    new Dictionary<string, IOpenApiSecurityScheme>();
 
             var schemeId = "Bearer";
 
@@ -26,16 +33,17 @@ namespace API.Services
                 Scheme = "bearer",
                 BearerFormat = "JWT",
                 In = ParameterLocation.Header,
-                Description = "JWT Authorization"
+                Description = "JWT Authorization",
             };
 
             document.Security ??= new List<OpenApiSecurityRequirement>();
 
-            document.Security.Add(new OpenApiSecurityRequirement
+            document.Security.Add(
+                new OpenApiSecurityRequirement
                 {
-                    [new OpenApiSecuritySchemeReference(schemeId)] = new List<string>()
-                });
-            }
+                    [new OpenApiSecuritySchemeReference(schemeId)] = new List<string>(),
+                }
+            );
         }
-    
+    }
 }

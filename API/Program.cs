@@ -31,6 +31,16 @@ builder.Services.AddOpenApi(
     options =>
     {
         options.AddDocumentTransformer<OpenApiTransformer>();
+        options.AddDocumentTransformer(
+            (doc, ctx, ct) =>
+            {
+                doc.Info.Title = "Tally Management System API";
+                doc.Info.Description =
+                    "Port operations API for managing tally sheets, vessels, cargo and teams.";
+                doc.Info.Version = "v1";
+                return Task.CompletedTask;
+            }
+        );
     }
 );
 builder.Services.AddCors(options =>
@@ -65,27 +75,30 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 
 app.MapOpenApi();
-app.MapScalarApiReference(
-    "/docs",
-    options =>
-    {
-        options.Title = "Tally API";
-        options.DarkMode = true;
-        options.BaseServerUrl = "https://tally-app-production.up.railway.app/";
-        options.DefaultHttpClient = new(ScalarTarget.CSharp, ScalarClient.HttpClient);
-        app.MapScalarApiReference(options =>
-            options
-                .AddPreferredSecuritySchemes("Bearer")
-                .AddHttpAuthentication(
-                    "Bearer",
-                    auth =>
-                    {
-                        auth.Token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...";
-                    }
-                )
-        );
-    }
-);
+if (app.Environment.IsDevelopment())
+{
+    app.MapScalarApiReference(
+        "/docs",
+        options =>
+        {
+            options.Title = "Tally API";
+            options.DarkMode = true;
+            options.BaseServerUrl = "https://tally-app-production.up.railway.app/";
+            options.DefaultHttpClient = new(ScalarTarget.CSharp, ScalarClient.HttpClient);
+            app.MapScalarApiReference(options =>
+                options
+                    .AddPreferredSecuritySchemes("Bearer")
+                    .AddHttpAuthentication(
+                        "Bearer",
+                        auth =>
+                        {
+                            auth.Token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...";
+                        }
+                    )
+            );
+        }
+    );
+}
 
 using (var scope = app.Services.CreateScope())
 {
@@ -95,6 +108,8 @@ using (var scope = app.Services.CreateScope())
 }
 
 await DataSeeder.SeedAsync(app.Services);
+
+app.SetupDocumentation();
 
 app.UseCors("AllowAll");
 
