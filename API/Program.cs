@@ -5,6 +5,7 @@ using FluentValidation;
 using Hangfire;
 using Infrastructure;
 using Infrastructure.Data;
+using Infrastructure.Data.Seeders;
 using Infrastructure.Jobs;
 using Infrastructure.Services;
 using Microsoft.AspNetCore.Diagnostics;
@@ -92,6 +93,8 @@ using (var scope = app.Services.CreateScope())
 
     await db.Database.MigrateAsync(); // applies any pending migrations
 }
+
+// await DataSeeder.SeedAsync(app.Services);
 
 app.UseCors("AllowAll");
 
