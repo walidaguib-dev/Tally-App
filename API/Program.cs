@@ -68,6 +68,7 @@ builder.Services.AddAuthorization();
 builder.Services.AddRateLimitingServices();
 builder.Services.AddFusionCache(builder.Configuration);
 builder.Services.AddSignalR();
+builder.Services.SetupResponseCompression();
 
 builder.Host.UseSerilog();
 var app = builder.Build();
@@ -113,6 +114,7 @@ app.SetupDocumentation();
 
 app.UseCors("AllowAll");
 
+app.UseResponseCompression();
 app.UseHttpsRedirection();
 
 app.UseGlobalExceptionHandling(app.Environment);

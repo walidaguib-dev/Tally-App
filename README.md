@@ -89,104 +89,18 @@ The Tally Management System replaces paper-based port tally workflows with a dig
 
 ---
 
-## 📡 API Endpoints
+## 📡 API Documentation
 
-### Auth
-```
-POST   /api/auth/register
-POST   /api/auth/login
-POST   /api/auth/logout
-POST   /api/tokens/refresh
-POST   /api/emails/verify
-POST   /api/emails/forget-password
-POST   /api/emails/reset-password
-```
+Interactive API documentation is available via **Redoc** — covering all 100+ endpoints across 17 controllers.
 
-### Ships
-```
-GET    /api/ships?pageNumber=1&pageSize=10&name=&sortBy=name&isDescending=false
-GET    /api/ships/{id}
-POST   /api/ships
-PUT    /api/ships/{id}
-DELETE /api/ships/{id}
-```
+> **Live Docs:** https://tally-app-production.up.railway.app/redoc
 
-### TallySheets
-```
-GET    /api/tallysheets?shipName=&shift=morning&zone=zone_a&date=
-GET    /api/tallysheets/{id}
-POST   /api/tallysheets
-PUT    /api/tallysheets/{id}
-DELETE /api/tallysheets/{id}
-```
-
-### TallySheet Trucks
-```
-GET    /api/tallysheettrucks/{tallySheetId}
-POST   /api/tallysheettrucks
-PATCH  /api/tallysheettrucks/{id}/end
-```
-
-### Pauses
-```
-GET    /api/pauses/tallysheet/{tallySheetId}
-GET    /api/pauses/truck/{tallySheetTruckId}
-GET    /api/pauses/{id}
-POST   /api/pauses
-PATCH  /api/pauses/{id}/end
-DELETE /api/pauses/{id}
-```
-
-### Merchandise
-```
-GET    /api/merchandises?pageNumber=1&pageSize=10&name=&type=
-GET    /api/merchandises/{id}
-POST   /api/merchandises
-PUT    /api/merchandises/{id}
-DELETE /api/merchandises/{id}
-```
-
-### TallySheet Merchandise
-```
-GET    /api/tallysheetmerchandise/{tallySheetId}
-GET    /api/tallysheetmerchandise/{tallySheetId}/{merchandiseId}
-POST   /api/tallysheetmerchandise
-PATCH  /api/tallysheetmerchandise/{tallySheetId}/{merchandiseId}/quantity
-DELETE /api/tallysheetmerchandise/{tallySheetId}/{merchandiseId}
-```
-
-### Clients
-```
-GET    /api/clients?pageNumber=1&pageSize=10&name=
-GET    /api/clients/{id}
-POST   /api/clients
-PUT    /api/clients/{id}
-DELETE /api/clients/{id}
-```
-
-### Trucks
-```
-GET    /api/trucks?pageNumber=1&pageSize=10
-GET    /api/trucks/{id}
-POST   /api/trucks
-PUT    /api/trucks/{id}
-DELETE /api/trucks/{id}
-```
-
-### Observations
-```
-GET    /api/observations/tallysheet/{tallySheetId}
-GET    /api/observations/{id}
-POST   /api/observations
-PUT    /api/observations/{id}
-DELETE /api/observations/{id}
-```
-
-### Uploads
-```
-POST   /api/uploads/profile-picture
-DELETE /api/uploads/{id}
-```
+Documentation includes:
+- Full request/response schemas
+- Authentication requirements per endpoint
+- Role-based access (Chef / Tallyman)
+- Validation rules and error responses
+- Real-time quantity update behavior explained
 
 ---
 
@@ -233,6 +147,7 @@ docker compose up --build
 - **Scalar UI:** http://localhost:5198/docs
 - **Hangfire Dashboard:** http://localhost:5198/hangfire
 - **MailHog UI:** http://localhost:8025
+- **Redoc UI:** http://localhost:5198/redoc
 
 ---
 
@@ -318,6 +233,3 @@ Deployed on **Railway** with:
 
 ---
 
-## 📄 License
-
-MIT
